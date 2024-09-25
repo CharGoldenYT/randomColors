@@ -1,0 +1,65 @@
+[
+    {
+		"save": "affectWhite",
+		"name": "Randomize the white of Notes", //Name shown on the mod settings menu
+		"type": "bool",
+		"description": "Whether to also randomize the white part of note color", //Description shown on the mod settings menu
+		"value": false //This is the default value
+	},
+    {
+		"save": "fullRandom",
+		"name": "Fully randomize notes", //Name shown on the mod settings menu
+		"type": "bool",
+		"description": "Whether the outline should be random too, or should try to be a darker shade of the main color\n(WARNING MAY BE INNACURATE IF NOT RANDOMIZING FROM TABLE)", //Description shown on the mod settings menu
+		"value": false //This is the default value
+	},
+    {
+		"save": "fixHolds",
+		"name": "Fix Hold Notes", //Name shown on the mod settings menu
+		"type": "bool",
+		"description": "Whether to fully randomize each section of the hold notes or use parent note's color", //Description shown on the mod settings menu
+		"value": true //This is the default value
+	},
+    {
+		"save": "fromTable",
+		"name": "Randomize from table", //Name shown on the mod settings menu
+		"type": "bool",
+		"description": "Whether to fully randomize the RGB values, or just pick from a pre-determined list (WILL BE OVERRIDDEN BY RANDOMIZE FROM NOTE TABLE)", //Description shown on the mod settings menu
+		"value": false //This is the default value
+	},
+    {
+		"save": "tableFromNote",
+		"name": "Randomize from note table", //Name shown on the mod settings menu
+		"type": "bool",
+		"description": "Whether to randomize from a table based on what note is being affected", //Description shown on the mod settings menu
+		"value": true //This is the default value
+	},
+    {
+		"save": "doRefresh",
+		"name": "Refresh colors every 2 Beats", //Name shown on the mod settings menu
+		"type": "bool",
+		"description": "Whether to refresh every 2 Beats, WARNING: WILL CAUSE OCCASIONAL GLITCHES WITH HOLD NOTES, oh and also POTENTIAL LAG.", //Description shown on the mod settings menu
+		"value": false //This is the default value
+	},
+    {
+		"save": "chaos",
+		"name": "Randomize Textures", //Name shown on the mod settings menu
+		"type": "bool",
+		"description": "Randomizes textures for oncoming notes", //Description shown on the mod settings menu
+		"value": false //This is the default value
+	},
+    {
+		"save": "trueChaos",
+		"name": "True Chaos Mode", //Name shown on the mod settings menu
+		"type": "bool",
+		"description": "Randomize EVERYTHING every 4 beats so it dont kill your game TOO hard.", //Description shown on the mod settings menu
+		"value": false //This is the default value
+	},
+    {
+		"save": "forceRandom",
+		"name": "Force random on all notes", //Name shown on the mod settings menu
+		"type": "bool",
+		"description": "If randomize textures enabled, also randomize the texture of every note regardless of type.", //Description shown on the mod settings menu
+		"value": false //This is the default value
+	}
+]
