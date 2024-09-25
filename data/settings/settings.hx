@@ -55,7 +55,7 @@ var paths:Array<String> = [
 ];
 
 function onCustomSubstateCreate(name:String) {
-    doFileCheck()
+    doFileCheck();
 }
 
 function onCustomSubstateUpdate(name:String, elapsed:Float)
