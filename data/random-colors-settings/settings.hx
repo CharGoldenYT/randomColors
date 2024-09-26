@@ -1,5 +1,6 @@
 import backend.Paths;
 import backend.Mods;
+import backend.Controls;
 import backend.ClientPrefs;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
@@ -14,7 +15,7 @@ import sys.io.File;
 import sys.io.FileSystem;
 import states.PlayState;
 import flixel.util.FlxColor;
-import flixel.util.FlxAxes;
+import flixel.util.FlxTimer;
 import flixel.addons.ui.FlxUIInputText;
 
 using StringTools;
@@ -66,6 +67,8 @@ var curSelectedGlobal:Int = 0;
 var selector:FlxSprite;
 var selector2:FlxSprite;
 
+var controls:Controls;
+
 var paths:Array<String> = [
     'global/colors',
     'global/colorsWhite',
@@ -85,6 +88,7 @@ var paths:Array<String> = [
 ];
 
 function onCustomSubstateCreate(name:String) {
+    controls = Controls.instance;
     doFileCheck();
     setupArrays();
     FlxG.sound.playMusic(Paths.music('offsetSong'));
@@ -123,27 +127,29 @@ function onCustomSubstateCreate(name:String) {
 
     selector = new FlxSprite().loadGraphic(Paths.image('buttons'));
     selector.frames = Paths.getSparrowAtlas('buttons');
-    selector.animation.addByPrefix('idle', 'arrow Down', 0);
-    selector.animation.addByPrefix('press', 'arrow down press', 0);
+    selector.animation.addByPrefix('idle', 'arrow Down0', 24, false);
+    selector.animation.addByPrefix('press', 'arrow down press0', 24, false);
     selector.setGraphicSize(Std.int(selector.width * 0.8));
     selector.updateHitbox();
     selector.cameras = [PlayState.instance.camOther];
     selector.screenCenter();
     selector.y += -190;
     selector.x = noteLeftGroup.members[0].x + 25;
+    selector.antialiasing = ClientPrefs.data.antialiasing;
     add(selector);
 
     selector2 = new FlxSprite().loadGraphic(Paths.image('buttons'));
     selector2.frames = Paths.getSparrowAtlas('buttons');
-    selector2.animation.addByPrefix('idle', 'arrow Up', 0);
-    selector2.animation.addByPrefix('press', 'arrow up press', 0);
+    selector2.animation.addByPrefix('idle', 'arrow Up0', 24);
+    selector2.animation.addByPrefix('press', 'arrow Up press0', 24);
+    selector2.animation.play('idle');
     selector2.setGraphicSize(Std.int(selector2.width * 0.8));
     selector2.updateHitbox();
     selector2.cameras = [PlayState.instance.camOther];
     selector2.screenCenter();
     selector2.y += -370;
     selector2.x = noteLeftGroup.members[0].x + 22;
-    selector2.flipY = true;
+    selector2.antialiasing = ClientPrefs.data.antialiasing;
     add(selector2);
 }
 
@@ -170,20 +176,24 @@ function setupArrays() {
 function onCustomSubstateUpdate(name:String, elapsed:Float)
 {
     if (name == 'test') {
-        if (FlxG.keys.justPressed.ENTER)
+        if (controls.ACCEPT)
             game.callOnLuas('openSubState', 'noteColorSelectorSubState');
 
-        if (FlxG.keys.justPressed.LEFT)
+        if (controls.UI_LEFT_P)
             changeSelection(-1, 0);
 
-        if (FlxG.keys.justPressed.RIGHT)
+        if (controls.UI_RIGHT_P)
             changeSelection(1, 0);
 
-        if (FlxG.keys.justPressed.UP)
+        if (controls.UI_UP_P) {
+            selector2.animation.play('press');
             changeSelection(-1, curSelected + 1);
+        }
 
-        if (FlxG.keys.justPressed.DOWN)
+        if (controls.UI_DOWN_P) {
+            selector.animation.play('press');
             changeSelection(1, curSelected + 1);
+        }
 
     }
 }
@@ -277,42 +287,42 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                     switch (curSelected) {
                         case 0:
                             canMoveSelector = false;
-                            FlxTween.tween(selector, {x: noteLeftGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                            FlxTween.tween(selector, {x: noteLeftGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                                 canMoveSelector = true;
                             }});
-                            FlxTween.tween(selector2, {x: noteLeftGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                            FlxTween.tween(selector2, {x: noteLeftGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                                 canMoveSelector = true;
                             }});
                         case 1:
                             canMoveSelector = false;
-                            FlxTween.tween(selector, {x: noteDownGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                            FlxTween.tween(selector, {x: noteDownGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                                 canMoveSelector = true;
                             }});
-                            FlxTween.tween(selector2, {x: noteDownGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                            FlxTween.tween(selector2, {x: noteDownGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                                 canMoveSelector = true;
                             }});
                         case 2:
                             canMoveSelector = false;
-                            FlxTween.tween(selector, {x: noteUpGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                            FlxTween.tween(selector, {x: noteUpGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                                 canMoveSelector = true;
                             }});
-                            FlxTween.tween(selector2, {x: noteUpGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                            FlxTween.tween(selector2, {x: noteUpGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                                 canMoveSelector = true;
                             }});
                         case 3:
                             canMoveSelector = false;
-                            FlxTween.tween(selector, {x: noteRightGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                            FlxTween.tween(selector, {x: noteRightGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                                 canMoveSelector = true;
                             }});
-                            FlxTween.tween(selector2, {x: noteRightGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                            FlxTween.tween(selector2, {x: noteRightGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                                 canMoveSelector = true;
                             }});
                         case 4:
                             canMoveSelector = false;
-                            FlxTween.tween(selector, {x: noteGlobalGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                            FlxTween.tween(selector, {x: noteGlobalGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                                 canMoveSelector = true;
                             }});
-                            FlxTween.tween(selector2, {x: noteGlobalGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                            FlxTween.tween(selector2, {x: noteGlobalGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                                 canMoveSelector = true;
                             }});
                     }
@@ -345,20 +355,32 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                         noteLeftGroup.members[i].offset.y = 0;
                     }
                     if (mustRevert) {
-                        FlxTween.tween(noteLeftGroup.members[i], {y: initialPosLeft[i]}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
-                            canMove = true;
+                        FlxTween.tween(noteLeftGroup.members[i], {y: initialPosLeft[i]}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                            var timer = new FlxTimer().start(1, function(tmr:FlxTimer) {
+                                canMove = true;
+                                selector.animation.play('idle');
+                                selector2.animation.play('idle');
+                            });
                         }});
                     }
                     if (mustLoop) {
                         var variable = 120 * (noteLeftGroup.members.length-1 % 4);
-                        FlxTween.tween(noteLeftGroup.members[i], {y: initialPosLeft[i] + -variable}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
-                            canMove = true;
+                        FlxTween.tween(noteLeftGroup.members[i], {y: initialPosLeft[i] + -variable}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                            var timer = new FlxTimer().start(1, function(tmr:FlxTimer) {
+                                canMove = true;
+                                selector.animation.play('idle');
+                                selector2.animation.play('idle');
+                            });
                         }});
                     }
                     if (!mustLoop && !mustRevert) {
                         var int = change < 0 ? 120 : -120;
-                        FlxTween.tween(noteLeftGroup.members[i], {y: noteLeftGroup.members[i].y + int}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
-                            canMove = true;
+                        FlxTween.tween(noteLeftGroup.members[i], {y: noteLeftGroup.members[i].y + int}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                            var timer = new FlxTimer().start(1, function(tmr:FlxTimer) {
+                                canMove = true;
+                                selector.animation.play('idle');
+                                selector2.animation.play('idle');
+                            });
                         }});
                     }
                 }
@@ -376,6 +398,8 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                     mustLoop = true;
                 }
 
+                canMove = false;
+
                 
                 for (i in 0...noteDownGroup.members.length) {
                     if (curSelectedDown != i) {
@@ -390,20 +414,26 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                         noteDownGroup.members[i].offset.y = 0;
                     }
                     if (mustRevert) {
-                        FlxTween.tween(noteDownGroup.members[i], {y: initialPosDown[i]}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteDownGroup.members[i], {y: initialPosDown[i]}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
+                            selector.animation.play('idle');
+                            selector2.animation.play('idle');
                         }});
                     }
                     if (mustLoop) {
                         var variable = 120 * (noteDownGroup.members.length-1 % 4);
-                        FlxTween.tween(noteDownGroup.members[i], {y: initialPosDown[i] + -variable}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteDownGroup.members[i], {y: initialPosDown[i] + -variable}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
+                            selector.animation.play('idle');
+                            selector2.animation.play('idle');
                         }});
                     }
                     if (!mustLoop && !mustRevert) {
                         var int = change < 0 ? 120 : -120;
-                        FlxTween.tween(noteDownGroup.members[i], {y: noteDownGroup.members[i].y + int}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteDownGroup.members[i], {y: noteDownGroup.members[i].y + int}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
+                            selector.animation.play('idle');
+                            selector2.animation.play('idle');
                         }});
                     }
                 }
@@ -420,6 +450,8 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                     mustLoop = true;
                 }
 
+                canMove = false;
+
                 for (i in 0...noteUpGroup.members.length) {
                     if (curSelectedUp != i) {
                         noteUpGroup.members[i].alpha = 0.5;
@@ -433,20 +465,26 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                         noteUpGroup.members[i].offset.y = 0;
                     }
                     if (mustRevert) {
-                        FlxTween.tween(noteUpGroup.members[i], {y: initialPosUp[i]}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteUpGroup.members[i], {y: initialPosUp[i]}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
+                            selector.animation.play('idle');
+                            selector2.animation.play('idle');
                         }});
                     }
                     if (mustLoop) {
                         var variable = 120 * (noteUpGroup.members.length-1 % 4);
-                        FlxTween.tween(noteUpGroup.members[i], {y: initialPosUp[i] + -variable}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteUpGroup.members[i], {y: initialPosUp[i] + -variable}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
+                            selector.animation.play('idle');
+                            selector2.animation.play('idle');
                         }});
                     }
                     if (!mustLoop && !mustRevert) {
                         var int = change < 0 ? 120 : -120;
-                        FlxTween.tween(noteUpGroup.members[i], {y: noteUpGroup.members[i].y + int}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteUpGroup.members[i], {y: noteUpGroup.members[i].y + int}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
+                            selector.animation.play('idle');
+                            selector2.animation.play('idle');
                         }});
                     }
                 }
@@ -463,6 +501,8 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                     mustLoop = true;
                 }
 
+                canMove = false;
+
                 for (i in 0...noteRightGroup.members.length) {
                     if (curSelectedRight != i) {
                         noteRightGroup.members[i].alpha = 0.5;
@@ -476,20 +516,26 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                         noteRightGroup.members[i].offset.y = 0;
                     }
                     if (mustRevert) {
-                        FlxTween.tween(noteRightGroup.members[i], {y: initialPosRight[i]}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteRightGroup.members[i], {y: initialPosRight[i]}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
+                            selector.animation.play('idle');
+                            selector2.animation.play('idle');
                         }});
                     }
                     if (mustLoop) {
                         var variable = 120 * (noteRightGroup.members.length-1 % 4);
-                        FlxTween.tween(noteRightGroup.members[i], {y: initialPosRight[i] + -variable}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteRightGroup.members[i], {y: initialPosRight[i] + -variable}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
+                            selector.animation.play('idle');
+                            selector2.animation.play('idle');
                         }});
                     }
                     if (!mustLoop && !mustRevert) {
                         var int = change < 0 ? 120 : -120;
-                        FlxTween.tween(noteRightGroup.members[i], {y: noteRightGroup.members[i].y + int}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteRightGroup.members[i], {y: noteRightGroup.members[i].y + int}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
+                            selector.animation.play('idle');
+                            selector2.animation.play('idle');
                         }});
                     }
                 }
@@ -506,6 +552,8 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                     mustLoop = true;
                 }
 
+                canMove = false;
+
                 for (i in 0...noteGlobalGroup.members.length) {
                     if (curSelectedGlobal != i) {
                         noteGlobalGroup.members[i].alpha = 0.5;
@@ -519,20 +567,26 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                         noteGlobalGroup.members[i].offset.y = 0;
                     }
                     if (mustRevert) {
-                        FlxTween.tween(noteGlobalGroup.members[i], {y: initialPosGlobal[i]}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteGlobalGroup.members[i], {y: initialPosGlobal[i]}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
+                            selector.animation.play('idle');
+                            selector2.animation.play('idle');
                         }});
                     }
                     if (mustLoop) {
                         var variable = 120 * (noteGlobalGroup.members.length-1 % 4);
-                        FlxTween.tween(noteGlobalGroup.members[i], {y: initialPosGlobal[i] + -variable}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteGlobalGroup.members[i], {y: initialPosGlobal[i] + -variable}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
+                            selector.animation.play('idle');
+                            selector2.animation.play('idle');
                         }});
                     }
                     if (!mustLoop && !mustRevert) {
                         var int = change < 0 ? 120 : -120;
-                        FlxTween.tween(noteGlobalGroup.members[i], {y: noteGlobalGroup.members[i].y + int}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteGlobalGroup.members[i], {y: noteGlobalGroup.members[i].y + int}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
+                            selector.animation.play('idle');
+                            selector2.animation.play('idle');
                         }});
                     }
                 }
@@ -567,8 +621,8 @@ function doNoteScreenSpawn() {
 
     var strumNote = new StrumNote(FlxG.width * 0.15, 120 * noteLeftGroup.members.length, 0, 1);
     strumNote.texture = 'color_select_essentials';
-    strumNote.animation.addByPrefix('purble', 'purple', 0);
-    strumNote.animation.play('purble');
+    strumNote.animation.addByPrefix('addNote', 'purple', 0);
+    strumNote.animation.play('addNote');
     noteLeftGroup.add(strumNote);
     initialPosLeft.push(strumNote.y);
 
@@ -587,8 +641,8 @@ function doNoteScreenSpawn() {
 
     var strumNote = new StrumNote(FlxG.width * 0.25, 120 * noteDownGroup.members.length, 0, 1);
     strumNote.texture = 'color_select_essentials';
-    strumNote.animation.addByPrefix('purble', 'blue', 0);
-    strumNote.animation.play('purble');
+    strumNote.animation.addByPrefix('addNote', 'blue', 0);
+    strumNote.animation.play('addNote');
     noteDownGroup.add(strumNote);
     initialPosDown.push(strumNote.y);
     
@@ -606,8 +660,8 @@ function doNoteScreenSpawn() {
 
     var strumNote = new StrumNote(FlxG.width * 0.35, 120 * noteUpGroup.members.length, 0, 1);
     strumNote.texture = 'color_select_essentials';
-    strumNote.animation.addByPrefix('purble', 'green', 0);
-    strumNote.animation.play('purble');
+    strumNote.animation.addByPrefix('addNote', 'green', 0);
+    strumNote.animation.play('addNote');
     noteUpGroup.add(strumNote);
     initialPosUp.push(strumNote.y);
     
@@ -625,8 +679,8 @@ function doNoteScreenSpawn() {
 
     var strumNote = new StrumNote(FlxG.width * 0.45, 120 * noteRightGroup.members.length, 0, 1);
     strumNote.texture = 'color_select_essentials';
-    strumNote.animation.addByPrefix('purble', 'red', 0);
-    strumNote.animation.play('purble');
+    strumNote.animation.addByPrefix('addNote', 'red', 0);
+    strumNote.animation.play('addNote');
     noteRightGroup.add(strumNote);
     initialPosRight.push(strumNote.y);
     
@@ -645,8 +699,8 @@ function doNoteScreenSpawn() {
 
     var strumNote = new StrumNote(FlxG.width * 0.55, 120 * noteGlobalGroup.members.length, 0, 1);
     strumNote.texture = 'color_select_essentials';
-    strumNote.animation.addByPrefix('purble', 'grey', 0);
-    strumNote.animation.play('purble');
+    strumNote.animation.addByPrefix('addNote', 'grey', 0);
+    strumNote.animation.play('addNote');
     noteGlobalGroup.add(strumNote);
     initialPosGlobal.push(strumNote.y);
 }
