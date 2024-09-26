@@ -4,6 +4,12 @@
 	<!-- http://www.adobe.com/products/animate.html -->
 	<SubTexture name="arrow Down0000" x="0" y="0" width="85" height="49"/>
 	<SubTexture name="arrow Up0000" x="86" y="0" width="85" height="49"/>
-	<SubTexture name="arrow Up press0000" x="172" y="0" width="75" height="43"/>
-	<SubTexture name="arrow down press0000" x="0" y="50" width="75" height="43"/>
+	<SubTexture name="arrow Up press0000" x="172" y="0" width="67" height="39" frameX="-9" frameY="-5" frameWidth="85" frameHeight="49"/>
+	<SubTexture name="arrow Up press0001" x="172" y="0" width="67" height="39" frameX="-9" frameY="-5" frameWidth="85" frameHeight="49"/>
+	<SubTexture name="arrow Up press0002" x="0" y="50" width="75" height="43" frameX="-5" frameY="-3" frameWidth="85" frameHeight="49"/>
+	<SubTexture name="arrow Up press0003" x="76" y="50" width="85" height="49"/>
+	<SubTexture name="arrow down press0000" x="162" y="50" width="67" height="38" frameX="-9" frameY="-5" frameWidth="85" frameHeight="49"/>
+	<SubTexture name="arrow down press0001" x="162" y="50" width="67" height="38" frameX="-9" frameY="-5" frameWidth="85" frameHeight="49"/>
+	<SubTexture name="arrow down press0002" x="0" y="100" width="75" height="43" frameX="-5" frameY="-3" frameWidth="85" frameHeight="49"/>
+	<SubTexture name="arrow down press0003" x="76" y="100" width="85" height="49"/>
 </TextureAtlas>
