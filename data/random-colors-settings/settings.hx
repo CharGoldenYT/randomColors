@@ -467,8 +467,8 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                     if (curSelectedRight != i) {
                         noteRightGroup.members[i].alpha = 0.5;
                         noteRightGroup.members[i].offset.y = -55;
-                        if (noteUpGroup.members[i].y < noteUpGroup.members[curSelectedUp].y) {
-                            noteUpGroup.members[i].offset.y = 55;
+                        if (noteRightGroup.members[i].y < noteRightGroup.members[curSelectedRight].y) {
+                            noteRightGroup.members[i].offset.y = 55;
                         }
                     }
                     if (curSelectedRight == i) {
