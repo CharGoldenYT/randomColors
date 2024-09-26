@@ -46,6 +46,7 @@ if chaos then
 	doRefresh = false -- BECAUSE IT WILL LAG IT THE F OUT
 end
 
+
 textures = {
 	'noteSkins/NOTE_assets'
 }
@@ -178,6 +179,9 @@ function noteTableRandomizeThatShit(noteData) -- Get a random color from a note'
 end
 
 function onCreatePost()
+	if songName == 'settings' then -- Settings is broken without these
+		close(nil)
+	end
 	math.randomseed(os.time())
 		doNoteRandom()
 end
@@ -821,7 +825,8 @@ function onPause()
 		runHaxeCode([[
 		import backend.ClientPrefs;
 
-		ClientPrefs.data.noteSkin = ']]..ogNoteSkin.."';"
+		ClientPrefs.data.noteSkin = ']]..ogNoteSkin.."';"..[[
+		ClientPrefs.saveSettings();]]
 		)
 	end
 end

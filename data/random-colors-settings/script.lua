@@ -18,22 +18,23 @@ function onSongStart()
     openCustomSubstate('test', true)
 end
 
+startRunning = false
+count = 0
+restart = false
 function onCustomSubstateUpdate(name, elapsed)
      if keyboardJustPressed('BACKSPACE') and name == 'test' then
             exitSong(false)
      end
      if keyboardJustPressed('R') and name == 'test' then
-            closeCustomSubstate()
+            restart()
      end
 end
 
-function onCustomSubstateDestroy(name)
-     if name == 'test' then
+function restart()
         loadColorsToFile()
-        restartSong(true)
-     end
+        closeCustomSubstate()
+        setProperty("startingSong", true)
 end
-
 local filePaths = {
     'global/colors',
     'global/colorsWhite',
@@ -52,9 +53,10 @@ local filePaths = {
     'right/colorsWhite'
 }
 
-function openSubState(name) {
+function openSubState(name) 
     --openCustomSubstate(name, true)
-}
+end
+
 
 function loadColorsToFile()
     for i=1,#filePaths do

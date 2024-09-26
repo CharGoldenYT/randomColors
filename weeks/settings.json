@@ -1,8 +1,8 @@
 {
 	"songs": [
 		[
+			"Random Colors Settings",
 			"settings",
-			"gear",
 			[
 				86,
 				73,
@@ -13,7 +13,7 @@
 	"hiddenUntilUnlocked": false,
 	"hideFreeplay": false,
 	"weekBackground": "stage",
-	"difficulties": "",
+	"difficulties": "settingS",
 	"weekCharacters": [
 		"dad",
 		"bf",
