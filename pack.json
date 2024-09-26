@@ -3,6 +3,6 @@
 	"description": "Randomized note colors",
 	"restart": false,
 	"runsGlobally": true,
-	"color": [232, 106, 203],
+	"color": [0, 0, 0],
 	"discordRPC": "863222024192262205"
 }
