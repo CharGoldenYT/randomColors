@@ -32,8 +32,7 @@ end
 
 function restart()
         loadColorsToFile()
-        closeCustomSubstate()
-        setProperty("startingSong", true)
+        restartSong(false)
 end
 local filePaths = {
     'global/colors',

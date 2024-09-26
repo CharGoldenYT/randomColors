@@ -15,6 +15,7 @@ import sys.io.FileSystem;
 import states.PlayState;
 import flixel.util.FlxColor;
 import flixel.util.FlxAxes;
+import flixel.addons.ui.FlxUIInputText;
 
 using StringTools;
 
@@ -87,10 +88,9 @@ function onCustomSubstateCreate(name:String) {
     doFileCheck();
     setupArrays();
     FlxG.sound.playMusic(Paths.music('offsetSong'));
-    BG = new FlxSprite().loadGraphic(Paths.image('menuBG'));
+    BG = new FlxSprite().loadGraphic(Paths.image('menuBGMagenta'));
     BG.screenCenter();
     BG.cameras = [PlayState.instance.camOther];
-    BG.alpha = 0.6;
     BG.scrollFactor.set(0, 0);
     add(BG);
     
@@ -130,7 +130,7 @@ function onCustomSubstateCreate(name:String) {
     selector.cameras = [PlayState.instance.camOther];
     selector.screenCenter();
     selector.y += -190;
-    selector.x = noteLeftGroup.members[0].x + 15;
+    selector.x = noteLeftGroup.members[0].x + 25;
     add(selector);
 
     selector2 = new FlxSprite().loadGraphic(Paths.image('buttons'));
@@ -142,7 +142,7 @@ function onCustomSubstateCreate(name:String) {
     selector2.cameras = [PlayState.instance.camOther];
     selector2.screenCenter();
     selector2.y += -370;
-    selector2.x = noteLeftGroup.members[0].x + 15;
+    selector2.x = noteLeftGroup.members[0].x + 22;
     selector2.flipY = true;
     add(selector2);
 }
@@ -253,6 +253,7 @@ var curSelectedRight:Int = 0;
 var curSelectedGlobal:Int = 0; 
  */
  var canMove:Bool = true;
+ var canMoveSelector:Bool = true;
  var initialPosLeft:Array<Int> = [];
  var initialPosDown:Array<Int> = [];
  var initialPosUp:Array<Int> = [];
@@ -264,30 +265,57 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
         var mustLoop:Bool = false;
         switch (direction) {
             case 0:
-                curSelected += change;
-                if (curSelected > 4)
-                    curSelected = 0;
-                if (curSelected < 0)
-                    curSelected = 4;
+                if (canMoveSelector) {
+                    curSelected += change;
+                    if (curSelected > 4)
+                        curSelected = 0;
+                    if (curSelected < 0)
+                        curSelected = 4;
 
-                FlxG.sound.play(Paths.sound('scrollMenu'));
+                    FlxG.sound.play(Paths.sound('scrollMenu'));
 
-                switch (curSelected) {
-                    case 0:
-                        selector.x = noteLeftGroup.members[0].x + 15;
-                        selector2.x = noteLeftGroup.members[0].x + 15;
-                    case 1:
-                        selector.x = noteDownGroup.members[0].x + 15;
-                        selector2.x = noteDownGroup.members[0].x + 15;
-                    case 2:
-                        selector.x = noteUpGroup.members[0].x + 15;
-                        selector2.x = noteUpGroup.members[0].x + 15;
-                    case 3:
-                        selector.x = noteRightGroup.members[0].x + 15;
-                        selector2.x = noteRightGroup.members[0].x + 15;
-                    case 4:
-                        selector.x = noteGlobalGroup.members[0].x + 15;
-                        selector2.x = noteGlobalGroup.members[0].x + 15;
+                    switch (curSelected) {
+                        case 0:
+                            canMoveSelector = false;
+                            FlxTween.tween(selector, {x: noteLeftGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                                canMoveSelector = true;
+                            }});
+                            FlxTween.tween(selector2, {x: noteLeftGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                                canMoveSelector = true;
+                            }});
+                        case 1:
+                            canMoveSelector = false;
+                            FlxTween.tween(selector, {x: noteDownGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                                canMoveSelector = true;
+                            }});
+                            FlxTween.tween(selector2, {x: noteDownGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                                canMoveSelector = true;
+                            }});
+                        case 2:
+                            canMoveSelector = false;
+                            FlxTween.tween(selector, {x: noteUpGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                                canMoveSelector = true;
+                            }});
+                            FlxTween.tween(selector2, {x: noteUpGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                                canMoveSelector = true;
+                            }});
+                        case 3:
+                            canMoveSelector = false;
+                            FlxTween.tween(selector, {x: noteRightGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                                canMoveSelector = true;
+                            }});
+                            FlxTween.tween(selector2, {x: noteRightGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                                canMoveSelector = true;
+                            }});
+                        case 4:
+                            canMoveSelector = false;
+                            FlxTween.tween(selector, {x: noteGlobalGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                                canMoveSelector = true;
+                            }});
+                            FlxTween.tween(selector2, {x: noteGlobalGroup.members[0].x + 22}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                                canMoveSelector = true;
+                            }});
+                    }
                 }
 
             case 1:
@@ -308,25 +336,28 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                     if (curSelectedLeft != i) {
                         noteLeftGroup.members[i].alpha = 0.5;
                         noteLeftGroup.members[i].offset.y = -55;
+                        if (noteLeftGroup.members[i].y < noteLeftGroup.members[curSelectedLeft].y) {
+                            noteLeftGroup.members[i].offset.y = 55;
+                        }
                     }
                     if (curSelectedLeft == i) {
                         noteLeftGroup.members[i].alpha = 1;
                         noteLeftGroup.members[i].offset.y = 0;
                     }
                     if (mustRevert) {
-                        FlxTween.tween(noteLeftGroup.members[i], {y: initialPosLeft[i]}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteLeftGroup.members[i], {y: initialPosLeft[i]}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
                     if (mustLoop) {
                         var variable = 120 * (noteLeftGroup.members.length-1 % 4);
-                        FlxTween.tween(noteLeftGroup.members[i], {y: initialPosLeft[i] + -variable}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteLeftGroup.members[i], {y: initialPosLeft[i] + -variable}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
                     if (!mustLoop && !mustRevert) {
                         var int = change < 0 ? 120 : -120;
-                        FlxTween.tween(noteLeftGroup.members[i], {y: noteLeftGroup.members[i].y + int}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteLeftGroup.members[i], {y: noteLeftGroup.members[i].y + int}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
@@ -350,25 +381,28 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                     if (curSelectedDown != i) {
                         noteDownGroup.members[i].alpha = 0.5;
                         noteDownGroup.members[i].offset.y = -55;
+                        if (noteDownGroup.members[i].y < noteDownGroup.members[curSelectedDown].y) {
+                            noteDownGroup.members[i].offset.y = 55;
+                        }
                     }
                     if (curSelectedDown == i) {
                         noteDownGroup.members[i].alpha = 1;
                         noteDownGroup.members[i].offset.y = 0;
                     }
                     if (mustRevert) {
-                        FlxTween.tween(noteDownGroup.members[i], {y: initialPosDown[i]}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteDownGroup.members[i], {y: initialPosDown[i]}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
                     if (mustLoop) {
                         var variable = 120 * (noteDownGroup.members.length-1 % 4);
-                        FlxTween.tween(noteDownGroup.members[i], {y: initialPosDown[i] + -variable}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteDownGroup.members[i], {y: initialPosDown[i] + -variable}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
                     if (!mustLoop && !mustRevert) {
                         var int = change < 0 ? 120 : -120;
-                        FlxTween.tween(noteDownGroup.members[i], {y: noteDownGroup.members[i].y + int}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteDownGroup.members[i], {y: noteDownGroup.members[i].y + int}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
@@ -390,25 +424,28 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                     if (curSelectedUp != i) {
                         noteUpGroup.members[i].alpha = 0.5;
                         noteUpGroup.members[i].offset.y = -55;
+                        if (noteUpGroup.members[i].y < noteUpGroup.members[curSelectedUp].y) {
+                            noteUpGroup.members[i].offset.y = 55;
+                        }
                     }
                     if (curSelectedUp == i) {
                         noteUpGroup.members[i].alpha = 1;
                         noteUpGroup.members[i].offset.y = 0;
                     }
                     if (mustRevert) {
-                        FlxTween.tween(noteUpGroup.members[i], {y: initialPosUp[i]}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteUpGroup.members[i], {y: initialPosUp[i]}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
                     if (mustLoop) {
                         var variable = 120 * (noteUpGroup.members.length-1 % 4);
-                        FlxTween.tween(noteUpGroup.members[i], {y: initialPosUp[i] + -variable}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteUpGroup.members[i], {y: initialPosUp[i] + -variable}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
                     if (!mustLoop && !mustRevert) {
                         var int = change < 0 ? 120 : -120;
-                        FlxTween.tween(noteUpGroup.members[i], {y: noteUpGroup.members[i].y + int}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteUpGroup.members[i], {y: noteUpGroup.members[i].y + int}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
@@ -430,25 +467,28 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                     if (curSelectedRight != i) {
                         noteRightGroup.members[i].alpha = 0.5;
                         noteRightGroup.members[i].offset.y = -55;
+                        if (noteUpGroup.members[i].y < noteUpGroup.members[curSelectedUp].y) {
+                            noteUpGroup.members[i].offset.y = 55;
+                        }
                     }
                     if (curSelectedRight == i) {
                         noteRightGroup.members[i].alpha = 1;
                         noteRightGroup.members[i].offset.y = 0;
                     }
                     if (mustRevert) {
-                        FlxTween.tween(noteRightGroup.members[i], {y: initialPosRight[i]}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteRightGroup.members[i], {y: initialPosRight[i]}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
                     if (mustLoop) {
                         var variable = 120 * (noteRightGroup.members.length-1 % 4);
-                        FlxTween.tween(noteRightGroup.members[i], {y: initialPosRight[i] + -variable}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteRightGroup.members[i], {y: initialPosRight[i] + -variable}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
                     if (!mustLoop && !mustRevert) {
                         var int = change < 0 ? 120 : -120;
-                        FlxTween.tween(noteRightGroup.members[i], {y: noteRightGroup.members[i].y + int}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteRightGroup.members[i], {y: noteRightGroup.members[i].y + int}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
@@ -470,25 +510,28 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                     if (curSelectedGlobal != i) {
                         noteGlobalGroup.members[i].alpha = 0.5;
                         noteGlobalGroup.members[i].offset.y = -55;
+                        if (noteGlobalGroup.members[i].y < noteGlobalGroup.members[curSelectedGlobal].y) {
+                            noteGlobalGroup.members[i].offset.y = 55;
+                        }
                     }
                     if (curSelectedGlobal == i) {
                         noteGlobalGroup.members[i].alpha = 1;
                         noteGlobalGroup.members[i].offset.y = 0;
                     }
                     if (mustRevert) {
-                        FlxTween.tween(noteGlobalGroup.members[i], {y: initialPosGlobal[i]}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteGlobalGroup.members[i], {y: initialPosGlobal[i]}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
                     if (mustLoop) {
                         var variable = 120 * (noteGlobalGroup.members.length-1 % 4);
-                        FlxTween.tween(noteGlobalGroup.members[i], {y: initialPosGlobal[i] + -variable}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteGlobalGroup.members[i], {y: initialPosGlobal[i] + -variable}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
                     if (!mustLoop && !mustRevert) {
                         var int = change < 0 ? 120 : -120;
-                        FlxTween.tween(noteGlobalGroup.members[i], {y: noteGlobalGroup.members[i].y + int}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        FlxTween.tween(noteGlobalGroup.members[i], {y: noteGlobalGroup.members[i].y + int}, 0.3, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
