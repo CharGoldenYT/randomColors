@@ -10,12 +10,12 @@ globalTable = {
 }
 -- Copy of the above moreso for testing, add your own! just keep it the same length to avoid it giving an error!
 globalTableWhite = {
-	'FF7700',
-	'FFB300',
-	'C24B99',
-	'00FFFF',
-	'12FA05',
-	'F9393F'
+	'FFFFFF',
+	'FFFFFF',
+	'FFFFFF',
+	'FFFFFF',
+	'FFFFFF',
+	'FFFFFF'
 }
 
 globalTableDark = {
@@ -38,9 +38,9 @@ leftArrowTable = {
 	'F9393F'
 }
 leftArrowTableWhite = {
-	'00FFFF',
-	'12FA05',
-	'F9393F'
+	'FFFFFF',
+	'FFFFFF',
+	'FFFFFF'
 }
 leftArrowTableDark = {
 	'1542B7',
@@ -55,9 +55,9 @@ downArrowTable = {
 	'F9393F'
 }
 downArrowTableWhite = {
-	'00FFFF',
-	'12FA05',
-	'F9393F'
+	'FFFFFF',
+	'FFFFFF',
+	'FFFFFF'
 }
 downArrowTableDark = {
 	'1542B7',
@@ -72,9 +72,9 @@ upArrowTable = {
 	'F9393F'
 }
 upArrowTableWhite = {
-	'00FFFF',
-	'12FA05',
-	'F9393F'
+	'FFFFFF',
+	'FFFFFF',
+	'FFFFFF'
 }
 upArrowTableDark = {
 	'1542B7',
@@ -89,9 +89,9 @@ rightArrowTable = {
 	'F9393F'
 }
 rightArrowTableWhite = {
-	'00FFFF',
-	'12FA05',
-	'F9393F'
+	'FFFFFF',
+	'FFFFFF',
+	'FFFFFF'
 }
 rightArrowTableDark = {
 	'1542B7',

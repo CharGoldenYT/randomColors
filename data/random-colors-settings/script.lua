@@ -37,8 +37,8 @@ function restart()
 end
 local filePaths = {
     'global/colors',
-    'global/colorsWhite',
     'global/colorsDark',
+    'global/colorsWhite',
     'left/colors',
     'left/colorsDark',
     'left/colorsWhite',
@@ -131,7 +131,12 @@ function loadColorsToFile()
 
         file = io.open('mods/randomColors/data/colors/'..filePaths[i]..'.txt', 'w')
         for i=1,#colorTable do
-            file:write(colorTable[i]..'\n')
+            if i ~= #colorTable then
+                file:write(colorTable[i]..'\n')
+            end
+            if i == #colorTable then
+                file:write(colorTable[i])
+            end
         end
         file:close()
     end

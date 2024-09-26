@@ -115,9 +115,9 @@ function onCustomSubstateCreate(name:String) {
     camFollow = new FlxObject(0, 0, 10, 10);
     camFollow.screenCenter();
     camFollow.y += -300;
-    camFollow.x += 150;
-    //camOther.zoom = 0.3;
-    //PlayState.instance.camOther.follow(camFollow, null, 0.1);
+    camFollow.x += 70;
+    camOther.zoom = 1.15;
+    PlayState.instance.camOther.follow(camFollow, null, 1);
     doNoteScreenSpawn();
     setAlpha();
 
@@ -319,7 +319,8 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                         }});
                     }
                     if (mustLoop) {
-                        FlxTween.tween(noteLeftGroup.members[i], {y: initialPosLeft[i] + (-120 * noteLeftGroup.members.length-1)}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        var variable = 120 * (noteLeftGroup.members.length-1 % 4);
+                        FlxTween.tween(noteLeftGroup.members[i], {y: initialPosLeft[i] + -variable}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
@@ -360,7 +361,8 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                         }});
                     }
                     if (mustLoop) {
-                        FlxTween.tween(noteDownGroup.members[i], {y: initialPosDown[i] + (-120 * noteDownGroup.members.length-1)}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        var variable = 120 * (noteDownGroup.members.length-1 % 4);
+                        FlxTween.tween(noteDownGroup.members[i], {y: initialPosDown[i] + -variable}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
@@ -399,7 +401,8 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                         }});
                     }
                     if (mustLoop) {
-                        FlxTween.tween(noteUpGroup.members[i], {y: initialPosUp[i] + (-120 * noteUpGroup.members.length-1)}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        var variable = 120 * (noteUpGroup.members.length-1 % 4);
+                        FlxTween.tween(noteUpGroup.members[i], {y: initialPosUp[i] + -variable}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
@@ -424,13 +427,13 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                 }
 
                 for (i in 0...noteRightGroup.members.length) {
-                    if (curSelectedGlobal != i) {
-                        noteGlobalGroup.members[i].alpha = 0.5;
-                        noteGlobalGroup.members[i].offset.y = -55;
+                    if (curSelectedRight != i) {
+                        noteRightGroup.members[i].alpha = 0.5;
+                        noteRightGroup.members[i].offset.y = -55;
                     }
-                    if (curSelectedGlobal == i) {
-                        noteGlobalGroup.members[i].alpha = 1;
-                        noteGlobalGroup.members[i].offset.y = 0;
+                    if (curSelectedRight == i) {
+                        noteRightGroup.members[i].alpha = 1;
+                        noteRightGroup.members[i].offset.y = 0;
                     }
                     if (mustRevert) {
                         FlxTween.tween(noteRightGroup.members[i], {y: initialPosRight[i]}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
@@ -438,7 +441,8 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                         }});
                     }
                     if (mustLoop) {
-                        FlxTween.tween(noteRightGroup.members[i], {y: initialPosRight[i] + (-120 * noteRightGroup.members.length-1)}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        var variable = 120 * (noteRightGroup.members.length-1 % 4);
+                        FlxTween.tween(noteRightGroup.members[i], {y: initialPosRight[i] + -variable}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
@@ -477,7 +481,8 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                         }});
                     }
                     if (mustLoop) {
-                        FlxTween.tween(noteGlobalGroup.members[i], {y: initialPosGlobal[i] + (-120 * noteGlobalGroup.members.length-1)}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        var variable = 120 * (noteGlobalGroup.members.length-1 % 4);
+                        FlxTween.tween(noteGlobalGroup.members[i], {y: initialPosGlobal[i] + -variable}, 0.1, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                             canMove = true;
                         }});
                     }
@@ -582,7 +587,7 @@ function doNoteScreenSpawn() {
     noteRightGroup.add(strumNote);
     initialPosRight.push(strumNote.y);
     
-    for (i in 0...curColorArrayGlobal.length-1) {
+    for (i in 0...curColorArrayGlobal.length) {
         var strumNote = new StrumNote(FlxG.width * 0.55, 120 * noteGlobalGroup.members.length, 0, 1);
         strumNote.rgbShader.enabled = true;
         strumNote.rgbShader.r = FlxColor.fromString('#' + curColorArrayGlobal[i]);
