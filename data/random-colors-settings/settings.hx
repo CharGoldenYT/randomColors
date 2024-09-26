@@ -140,8 +140,8 @@ function onCustomSubstateCreate(name:String) {
 
     selector2 = new FlxSprite().loadGraphic(Paths.image('buttons'));
     selector2.frames = Paths.getSparrowAtlas('buttons');
-    selector2.animation.addByPrefix('idle', 'arrow Up0', 24);
-    selector2.animation.addByPrefix('press', 'arrow Up press0', 24);
+    selector2.animation.addByPrefix('idle', 'arrow Up0', 24, false);
+    selector2.animation.addByPrefix('press', 'arrow Up press0', 24, false);
     selector2.animation.play('idle');
     selector2.setGraphicSize(Std.int(selector2.width * 0.8));
     selector2.updateHitbox();
@@ -194,7 +194,8 @@ function onCustomSubstateUpdate(name:String, elapsed:Float)
             selector.animation.play('press');
             changeSelection(1, curSelected + 1);
         }
-
+        selector.update(elapsed);
+        selector2.update(elapsed);
     }
 }
 
@@ -356,31 +357,25 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                     }
                     if (mustRevert) {
                         FlxTween.tween(noteLeftGroup.members[i], {y: initialPosLeft[i]}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
-                            var timer = new FlxTimer().start(1, function(tmr:FlxTimer) {
-                                canMove = true;
-                                selector.animation.play('idle');
-                                selector2.animation.play('idle');
-                            });
+                            canMove = true;
+                            selector.animation.play('idle');
+                            selector2.animation.play('idle');
                         }});
                     }
                     if (mustLoop) {
                         var variable = 120 * (noteLeftGroup.members.length-1 % 4);
                         FlxTween.tween(noteLeftGroup.members[i], {y: initialPosLeft[i] + -variable}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
-                            var timer = new FlxTimer().start(1, function(tmr:FlxTimer) {
                                 canMove = true;
                                 selector.animation.play('idle');
                                 selector2.animation.play('idle');
-                            });
                         }});
                     }
                     if (!mustLoop && !mustRevert) {
                         var int = change < 0 ? 120 : -120;
                         FlxTween.tween(noteLeftGroup.members[i], {y: noteLeftGroup.members[i].y + int}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
-                            var timer = new FlxTimer().start(1, function(tmr:FlxTimer) {
-                                canMove = true;
-                                selector.animation.play('idle');
-                                selector2.animation.play('idle');
-                            });
+                            canMove = true;
+                            selector.animation.play('idle');
+                            selector2.animation.play('idle');
                         }});
                     }
                 }
