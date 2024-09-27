@@ -282,63 +282,67 @@ function onCustomSubstateUpdate(name:String, elapsed:Float)
             colorInputWhite.update(elapsed);
 
             checkForInput();
-
-        if (!blockInput) {
-            if (controls.BACK) {
-                game.callOnLuas('leave');
-            }
-            if (controls.RESET) {
-                game.callOnLuas('restart');
-            }
-        }
         if (blockInput && FlxG.keys.justPressed.ENTER) {
             for (input in inputBlock) {
                 input.hasFocus = false;
                 blockInput = false;
             }
         }
-        if (controls.ACCEPT)
-            switch(curSelected) {
-                case 0:
-                    if (noteLeftGroup.members[curSelectedLeft].animation.curAnim.name == 'addNote')
-                    {
-                        curColorArrayLeft.push('FF7700');
-                        curColorArrayLeftWhite.push('FFFFFF');
-                        curColorArrayLeftDark.push('801C00');
-                        var strumNote = new StrumNote(FlxG.width * 0.15, 120 * noteLeftGroup.members.length, 0, 1);
-                        strumNote.rgbShader.enabled = true;
-                        strumNote.rgbShader.r = FlxColor.fromString('#FF7700');
-                        strumNote.rgbShader.g = FlxColor.fromString('#FFFFFF');
-                        strumNote.rgbShader.b = FlxColor.fromString('#801C00');
-                        strumNote.animation.addByPrefix('purble', 'purple', 0);
-                        strumNote.animation.play('purble');
-                        noteLeftGroup.add(strumNote);
-                        initialPosLeft.push(strumNote.y);
-                        var variable = (120 * (noteLeftGroup.members.length-1 % 4)) - 120;
-                        strumNote.y += -variable;
-                        strumNote.offset.y = -55;
-                        strumNote.alpha = 0.5;
-                        flushColorTables();
-                    }
+
+        if (!blockInput) {
+            
+            if (controls.BACK) {
+                game.callOnLuas('leave');
             }
 
-        if (controls.UI_LEFT_P)
-            changeSelection(-1, 0);
+            if (controls.RESET) {
+                game.callOnLuas('restart');
+            }
 
-        if (controls.UI_RIGHT_P)
-            changeSelection(1, 0);
+            if (controls.ACCEPT) {
+                switch(curSelected) {
+                    case 0:
+                        if (noteLeftGroup.members[curSelectedLeft].animation.curAnim.name == 'addNote')
+                        {
+                            curColorArrayLeft.push('FF7700');
+                            curColorArrayLeftWhite.push('FFFFFF');
+                            curColorArrayLeftDark.push('801C00');
+                            var strumNote = new StrumNote(FlxG.width * 0.15, 120 * noteLeftGroup.members.length, 0, 1);
+                            strumNote.rgbShader.enabled = true;
+                            strumNote.rgbShader.r = FlxColor.fromString('#FF7700');
+                            strumNote.rgbShader.g = FlxColor.fromString('#FFFFFF');
+                            strumNote.rgbShader.b = FlxColor.fromString('#801C00');
+                            strumNote.animation.addByPrefix('purble', 'purple', 0);
+                            strumNote.animation.play('purble');
+                            noteLeftGroup.add(strumNote);
+                            initialPosLeft.push(strumNote.y);
+                            var variable = (120 * (noteLeftGroup.members.length-1 % 4)) - 120;
+                            strumNote.y += -variable;
+                            strumNote.offset.y = -55;
+                            strumNote.alpha = 0.5;
+                            flushColorTables();
+                        }
+                }
+            }
 
-        if (controls.UI_UP_P) {
-            selector2.animation.play('press');
-            changeSelection(-1, curSelected + 1);
+            if (controls.UI_LEFT_P)
+                changeSelection(-1, 0);
+
+            if (controls.UI_RIGHT_P)
+                changeSelection(1, 0);
+
+            if (controls.UI_UP_P) {
+                selector2.animation.play('press');
+                changeSelection(-1, curSelected + 1);
+            }
+
+            if (controls.UI_DOWN_P) {
+                selector.animation.play('press');
+                changeSelection(1, curSelected + 1);
+            }
+            selector.update(elapsed);
+            selector2.update(elapsed);
         }
-
-        if (controls.UI_DOWN_P) {
-            selector.animation.play('press');
-            changeSelection(1, curSelected + 1);
-        }
-        selector.update(elapsed);
-        selector2.update(elapsed);
     }
 }
 
