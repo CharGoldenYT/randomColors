@@ -20,7 +20,7 @@ import flixel.util.FlxTimer;
 import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUITabMenu;
-
+import flixel.addons.ui.FlxUINumericStepper;
 using StringTools;
 
 var BG:FlxSprite;
@@ -89,19 +89,38 @@ var paths:Array<String> = [
     'right/colorsDark',
     'right/colorsWhite'
 ];
+
 var canMove:Bool = true;
 var canMoveSelector:Bool = true;
+
+// Initial position for notes spawned
 var initialPosLeft:Array<Int> = [];
 var initialPosDown:Array<Int> = [];
 var initialPosUp:Array<Int> = [];
 var initialPosRight:Array<Int> = [];
 var initialPosGlobal:Array<Int> = [];
 
+// Stuff for making sure you dont accidentally exit upon hitting exit.
 var inputBlock:Array<FlxUIInputText> = [];
 var blockInput:Bool = false;
+
+// Stuff for making the inputs work
+    // Hex code inputs
 var colorInput:FlxUIInputText;
 var colorInputDark:FlxUIInputText;
 var colorInputWhite:FlxUIInputText;
+    // RGB Input
+var colorInputR:FlxUINumericStepper;
+var colorInputG:FlxUINumericStepper;
+var colorInputB:FlxUINumericStepper;
+    // RGB Input (Dark)
+var colorInputDarkR:FlxUINumericStepper;
+var colorInputDarkG:FlxUINumericStepper;
+var colorInputDarkB:FlxUINumericStepper;
+    // RGB Input (Whites)
+var colorInputWhiteR:FlxUINumericStepper;
+var colorInputWhiteG:FlxUINumericStepper;
+var colorInputWhiteB:FlxUINumericStepper;
 
 function onCustomSubstateCreate(name:String) {
     FlxG.mouse.visible = true;
@@ -139,9 +158,23 @@ function onCustomSubstateCreate(name:String) {
     camFollow.x += 70;
     camOther.zoom = 1.15;
     PlayState.instance.camOther.follow(camFollow, null, 1);
+
     doNoteScreenSpawn();
     setAlpha();
 
+    var colorInputBG = new FlxSprite().makeGraphic(600, Std.int(FlxG.height * 1.5), 0xFF000000);
+    colorInputBG.alpha = 0.5;
+    colorInputBG.cameras = [PlayState.instance.camOther];
+    add(colorInputBG);
+
+    setupTextInput();
+    setupRGBSteppers();
+    setupTextCallbacks();
+    colorInputBG.y = colorInput.y - 300;
+    colorInputBG.x = colorInput.x - 100;
+}
+
+function setupTextInput() {
     selector = new FlxSprite().loadGraphic(Paths.image('buttons'));
     selector.frames = Paths.getSparrowAtlas('buttons');
     selector.animation.addByPrefix('idle', 'arrow Down0', 24, false);
@@ -184,7 +217,7 @@ function onCustomSubstateCreate(name:String) {
     colorInputDark = new FlxUIInputText(0, 0, 100, curColorArrayLeftDark[0]);
     colorInputDark.cameras = [PlayState.instance.camOther];
     colorInputDark.screenCenter();
-    colorInputDark.y += -400;
+    colorInputDark.y += -330;
     colorInputDark.x += 500;
     add(colorInputDark);
     var colorText = new FlxText(0, 0, 0, 'Note Color (Outline)', 10);
@@ -196,7 +229,7 @@ function onCustomSubstateCreate(name:String) {
     colorInputWhite = new FlxUIInputText(0, 0, 100, curColorArrayLeftWhite[0]);
     colorInputWhite.cameras = [PlayState.instance.camOther];
     colorInputWhite.screenCenter();
-    colorInputWhite.y += -300;
+    colorInputWhite.y += -180;
     colorInputWhite.x += 500;
     add(colorInputWhite);
     var colorText = new FlxText(0, 0, 0, 'Note Color (White Area)', 10);
@@ -208,8 +241,173 @@ function onCustomSubstateCreate(name:String) {
     inputBlock.push(colorInput);
     inputBlock.push(colorInputDark);
     inputBlock.push(colorInputWhite);
+}
+// Converts a two length hex number to a 256-max decimal
+function convertHexToInt(hex:String) {
+    var hexArray = hex.split();
+    var finalInt:Int = 0;
+    for (i in 0...hexArray.length) {
+        switch (hexArray[i].toLowerCase()) {
+            case '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9':
+                finalInt += Std.parseInt(hexArray[i]) * 8;
+            case '1':
+                finalInt += 8;
+            case 'a':
+                finalInt += 10 * 8;
+            case 'b':
+                finalInt += 11 * 8;
+            case 'c':
+                finalInt += 12 * 8;
+            case 'd':
+                finalInt += 13 * 8;
+            case 'e':
+                finalInt += 14 * 8;
+            case 'f':
+                finalInt += 15 * 8;
+        }
+        //trace(hexArray[i]);
+    }
 
-    setupTextCallbacks();
+    return finalInt;
+}
+
+function setupRGBSteppers() {
+     var leftRGB = acquireRGBArray(curColorArrayLeft[0]);
+
+    colorInputR = new FlxUINumericStepper(colorInput.x, colorInput.y + 40, 16, leftRGB[0], 0, 256, 0);
+    colorInputR.cameras = [PlayState.instance.camOther];
+    add(colorInputR);
+    inputBlock.push(colorInputR);
+
+    var colorText = new FlxText(0, 0, 0, 'RGB Input (R)', 10);
+    colorText.y = colorInputR.y - 20;
+    colorText.x = colorInputWhite.x;
+    colorText.cameras = [PlayState.instance.camOther];
+    add(colorText);
+
+    colorInputG = new FlxUINumericStepper(colorInput.x, colorInput.y + 80, 16, leftRGB[1], 0, 256, 0);
+    colorInputG.cameras = [PlayState.instance.camOther];
+    add(colorInputG);
+    inputBlock.push(colorInputG);
+
+    var colorText = new FlxText(0, 0, 0, 'RGB Input (G)', 10);
+    colorText.y = colorInputG.y - 20;
+    colorText.x = colorInputWhite.x;
+    colorText.cameras = [PlayState.instance.camOther];
+    add(colorText);
+    
+    colorInputB = new FlxUINumericStepper(colorInput.x, colorInput.y + 120, 16, leftRGB[2], 0, 256, 0);
+    colorInputB.cameras = [PlayState.instance.camOther];
+    add(colorInputB);
+    inputBlock.push(colorInputB);
+
+    var colorText = new FlxText(0, 0, 0, 'RGB Input (B)', 10);
+    colorText.y = colorInputB.y - 20;
+    colorText.x = colorInputWhite.x;
+    colorText.cameras = [PlayState.instance.camOther];
+    add(colorText);
+
+    var leftDarkRGB = acquireRGBArray(curColorArrayLeftDark[0]);
+
+    colorInputDarkR = new FlxUINumericStepper(colorInputDark.x, colorInputDark.y + 40, 16, leftDarkRGB[0], 0, 256, 0);
+    colorInputDarkR.cameras = [PlayState.instance.camOther];
+    add(colorInputDarkR);
+    inputBlock.push(colorInputDarkR);
+
+    var colorText = new FlxText(0, 0, 0, 'RGB Input (R)', 10);
+    colorText.y = colorInputDarkR.y - 20;
+    colorText.x = colorInputWhite.x;
+    colorText.cameras = [PlayState.instance.camOther];
+    add(colorText);
+
+    colorInputDarkG = new FlxUINumericStepper(colorInputDark.x, colorInputDark.y + 80, 16, leftDarkRGB[1], 0, 256, 0);
+    colorInputDarkG.cameras = [PlayState.instance.camOther];
+    add(colorInputDarkG);
+    inputBlock.push(colorInputDarkG);
+
+    var colorText = new FlxText(0, 0, 0, 'RGB Input (G)', 10);
+    colorText.y = colorInputDarkG.y - 20;
+    colorText.x = colorInputWhite.x;
+    colorText.cameras = [PlayState.instance.camOther];
+    add(colorText);
+    
+    colorInputDarkB = new FlxUINumericStepper(colorInputDark.x, colorInputDark.y + 116, 16, leftDarkRGB[2], 0, 256, 0);
+    colorInputDarkB.cameras = [PlayState.instance.camOther];
+    add(colorInputDarkB);
+    inputBlock.push(colorInputDarkB);
+
+    var colorText = new FlxText(0, 0, 0, 'RGB Input (B)', 10);
+    colorText.y = colorInputDarkB.y - 20;
+    colorText.x = colorInputWhite.x;
+    colorText.cameras = [PlayState.instance.camOther];
+    add(colorText);
+
+    var leftWhiteRGB = acquireRGBArray(curColorArrayLeftWhite[0]);
+
+    colorInputWhiteR = new FlxUINumericStepper(colorInputWhite.x, colorInputWhite.y + 40, 16, leftWhiteRGB[0], 0, 256, 0);
+    colorInputWhiteR.cameras = [PlayState.instance.camOther];
+    add(colorInputWhiteR);
+    inputBlock.push(colorInputWhiteR);
+
+    var colorText = new FlxText(0, 0, 0, 'RGB Input (R)', 10);
+    colorText.y = colorInputWhiteR.y - 20;
+    colorText.x = colorInputWhite.x;
+    colorText.cameras = [PlayState.instance.camOther];
+    add(colorText);
+
+    colorInputWhiteG = new FlxUINumericStepper(colorInputWhite.x, colorInputWhite.y + 80, 16, leftWhiteRGB[1], 0, 256, 0);
+    colorInputWhiteG.cameras = [PlayState.instance.camOther];
+    add(colorInputWhiteG);
+    inputBlock.push(colorInputWhiteG);
+
+    var colorText = new FlxText(0, 0, 0, 'RGB Input (G)', 10);
+    colorText.y = colorInputWhiteG.y - 20;
+    colorText.x = colorInputWhite.x;
+    colorText.cameras = [PlayState.instance.camOther];
+    add(colorText);
+    
+    colorInputWhiteB = new FlxUINumericStepper(colorInputWhite.x, colorInputWhite.y + 120, 16, leftWhiteRGB[2], 0, 256, 0);
+    colorInputWhiteB.cameras = [PlayState.instance.camOther];
+    add(colorInputWhiteB);
+    inputBlock.push(colorInputWhiteB);
+
+    var colorText = new FlxText(0, 0, 0, 'RGB Input (B)', 10);
+    colorText.y = colorInputWhiteB.y - 20;
+    colorText.x = colorInputWhite.x;
+    colorText.cameras = [PlayState.instance.camOther];
+    add(colorText);
+}
+
+function acquireRGBArray(str:String):Array<Int>
+{
+    var RGBArray = [];
+    var hex1 = '';
+    var hex2 = '';
+    var hex3 = '';
+    var hex = str.split();
+    for (i in 0...6) {
+        if (i < 2) {
+            hex1 += hex[i];
+        }
+        if (i >= 2 && i < 4) {
+            hex2 += hex[i];
+        }
+        if (i >= 4) {
+            hex3 = hex[i];
+        }
+        trace('Cur Hex: ' + hex[i]);
+    }
+    for (i in 0...3) {
+        RGBArray.push(switch (i) {
+            case 0:
+                convertHexToInt(hex1);
+            case 1:
+                convertHexToInt(hex2);
+            case 2:
+                convertHexToInt(hex3);
+        });
+    }
+    return RGBArray;
 }
 
 function setupTextCallbacks() {
@@ -473,24 +671,6 @@ function checkForInput() {
     blockInput = false;
 }
 
-                /*curColorArrayLeft.push('FF7700');
-                curColorArrayLeftWhite.push('FFFFFF');
-                curColorArrayLeftDark.push('801C00');
-                var strumNote = new StrumNote(FlxG.width * 0.15, 120 * noteLeftGroup.members.length, 0, 1);
-                strumNote.rgbShader.enabled = true;
-                noteLeftGroup.add(strumNote);
-                initialPosLeft.push(strumNote.y);
-                var variable = (120 * (noteLeftGroup.members.length-1 % 4)) - 120;
-                strumNote.y += -variable;
-                strumNote.offset.y = -55;
-                strumNote.alpha = 0.5;
-                flushColorTables();
-                var strumNote = new StrumNote(FlxG.width * 0.55, 120 * noteGlobalGroup.members.length, 0, 1);
-                strumNote.texture = 'color_select_essentials';
-                strumNote.animation.addByPrefix('addNote', 'grey', 0);
-                strumNote.animation.play('addNote');
-                noteGlobalGroup.add(strumNote);
-                initialPosGlobal.push(strumNote.y);*/
 function addNote(curSelected:Int = 0) {
     switch(curSelected) {
         case 0:
@@ -499,7 +679,7 @@ function addNote(curSelected:Int = 0) {
                 curColorArrayLeft.push('FF7700');
                 curColorArrayLeftWhite.push('FFFFFF');
                 curColorArrayLeftDark.push('801C00');
-                noteLeftGroup.members[curSelectedLeft].texture = 'noteSkins/NOTE_assets';
+                noteLeftGroup.members[curSelectedLeft].texture = 'noteSkins/NOTE_assets' + game.callOnLuas('getNotePostfix');
                 noteLeftGroup.members[curSelectedLeft].rgbShader.enabled = true;
                 noteLeftGroup.members[curSelectedLeft].rgbShader.r = FlxColor.fromString('#FF7700');
                 noteLeftGroup.members[curSelectedLeft].rgbShader.g = FlxColor.fromString('#FFFFFF');
@@ -524,9 +704,9 @@ function addNote(curSelected:Int = 0) {
 function onCustomSubstateUpdate(name:String, elapsed:Float)
 {
     if (name == 'test') {
-            colorInput.update(elapsed);
-            colorInputDark.update(elapsed);
-            colorInputWhite.update(elapsed);
+            for (input in inputBlock) {
+                input.update();
+            }
 
             checkForInput();
         if (blockInput && FlxG.keys.justPressed.ENTER) {

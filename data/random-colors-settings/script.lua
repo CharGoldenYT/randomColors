@@ -45,6 +45,10 @@ local filePaths = {
     'right/colorsWhite'
 }
 
+function getNotePostfix()
+    return noteSkinPostfix
+end
+
 function openSubState(name) 
     --openCustomSubstate(name, true)
 end
