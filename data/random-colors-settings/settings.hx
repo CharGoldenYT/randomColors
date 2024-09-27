@@ -207,6 +207,16 @@ function onCustomSubstateCreate(name:String) {
     add(globalText);
 }
 
+// Fill it with junk data basically.
+function doFileCheck() {
+    for (path in paths) {
+        path = 'mods/randomColors/data/colors/' + path + '.txt';
+        if (!FileSystem.exists(path)) {
+            File.saveContent(path, 'FFFFFF\nFFFFFF');
+        }
+    }
+}
+
 function setupTextInput() {
     selector = new FlxSprite().loadGraphic(Paths.image('buttons'));
     selector.frames = Paths.getSparrowAtlas('buttons');
@@ -762,12 +772,12 @@ function addNote(curSelected:Int = 0) {
                 strumNote.animation.addByPrefix('addNote', 'purple', 0);
                 strumNote.animation.play('addNote');
                 noteLeftGroup.add(strumNote);
+                initialPosLeft.push(strumNote.y);
                 var variable = (120 * (noteLeftGroup.members.length-1 % 4)) - 120;
                 strumNote.y += -variable;
                 strumNote.offset.y = -55;
                 strumNote.alpha = 0.5;
                 flushColorTables();
-                initialPosLeft.push(strumNote.y);
             }
 
         case 1:
@@ -788,13 +798,13 @@ function addNote(curSelected:Int = 0) {
                 strumNote.texture = 'color_select_essentials';
                 strumNote.animation.addByPrefix('addNote', 'blue', 0);
                 strumNote.animation.play('addNote');
+                initialPosDown.push(strumNote.y);
                 noteDownGroup.add(strumNote);
                 var variable = (120 * (noteDownGroup.members.length-1 % 4)) - 120;
                 strumNote.y += -variable;
                 strumNote.offset.y = -55;
                 strumNote.alpha = 0.5;
                 flushColorTables();
-                initialPosDown.push(strumNote.y);
             }
 
         case 2:
@@ -816,12 +826,12 @@ function addNote(curSelected:Int = 0) {
                 strumNote.animation.addByPrefix('addNote', 'green', 0);
                 strumNote.animation.play('addNote');
                 noteUpGroup.add(strumNote);
+                initialPosUp.push(strumNote.y);
                 var variable = (120 * (noteUpGroup.members.length-1 % 4)) - 120;
                 strumNote.y += -variable;
                 strumNote.offset.y = -55;
                 strumNote.alpha = 0.5;
                 flushColorTables();
-                initialPosUp.push(strumNote.y);
             }
 
         case 3:
@@ -869,12 +879,12 @@ function addNote(curSelected:Int = 0) {
                 strumNote.animation.addByPrefix('addNote', 'grey', 0);
                 strumNote.animation.play('addNote');
                 noteGlobalGroup.add(strumNote);
+                initialPosGlobal.push(strumNote.y);
                 var variable = (120 * (noteGlobalGroup.members.length-1 % 4)) - 120;
                 strumNote.y += -variable;
                 strumNote.offset.y = -55;
                 strumNote.alpha = 0.5;
                 flushColorTables();
-                initialPosGlobal.push(strumNote.y);
             }
     }
 
@@ -1488,17 +1498,6 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
         }
     }
 }
-
-function doFileCheck() {
-    for (path in paths) {
-        path = 'mods/randomColors/data/colors/' + path + '.txt';
-        if (!FileSystem.exists(path)) {
-            File.saveContent(path, 'FFFFFF\nFFFFFF');
-        }
-    }
-}
-
-//x:Float, y:Float, leData:Int, player:Int
 
 function doNoteScreenSpawn() {
     for (i in 0...curColorArrayLeft.length) {
