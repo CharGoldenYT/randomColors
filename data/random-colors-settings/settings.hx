@@ -10,6 +10,8 @@ import flixel.FlxSprite;
 import flixel.FlxObject;
 import flixel.group.FlxTypedSpriteGroup;
 import flixel.text.FlxText;
+import flixel.text.FlxTextBorderStyle;
+import flixel.text.FlxTextAlign;
 import flixel.util.FlxColor;
 import objects.StrumNote;
 import sys.io.File;
@@ -21,9 +23,15 @@ import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.addons.ui.FlxUINumericStepper;
+import flixel.addons.display.FlxBackdrop;
+import flixel.addons.display.FlxGridOverlay;
+import flixel.sound.FlxSound;
+
 using StringTools;
 
+// BG Stuffs
 var BG:FlxSprite;
+var grid:FlxBackdrop;
 
 // Left Note Shit.
 var noteLeftGroup:FlxTypedSpriteGroup<StrumNote>;
@@ -67,8 +75,10 @@ var curSelectedUp:Int = 0;
 var curSelectedRight:Int = 0;
 var curSelectedGlobal:Int = 0;
 
+// Selector related shit
 var selector:FlxSprite;
 var selector2:FlxSprite;
+var globalText:FlxText;
 
 var controls:Controls;
 
@@ -121,18 +131,33 @@ var colorInputDarkB:FlxUINumericStepper;
 var colorInputWhiteR:FlxUINumericStepper;
 var colorInputWhiteG:FlxUINumericStepper;
 var colorInputWhiteB:FlxUINumericStepper;
+var subStateMusic:FlxSound;
 
 function onCustomSubstateCreate(name:String) {
+    PlayState.instance.canPause = false; // need to call this else people can break it by simply opening the pause menu lmao.
+    PlayState.instance.allowDebugKeys = false;
     FlxG.mouse.visible = true;
+    FlxG.sound.music.volume = 0;// just in case
+    subStateMusic = new FlxSound();
+    subStateMusic.loadEmbedded(Paths.music('offsetSong'));
+    subStateMusic.looped = true;
+    subStateMusic.play();
+    FlxG.sound.list.add(subStateMusic); // so it auto pauses if auto pause is enabled
     controls = Controls.instance;
     doFileCheck();
     setupArrays();
-    FlxG.sound.playMusic(Paths.music('offsetSong'));
     BG = new FlxSprite().loadGraphic(Paths.image('menuBGMagenta'));
     BG.screenCenter();
     BG.cameras = [PlayState.instance.camOther];
     BG.scrollFactor.set(0, 0);
     add(BG);
+
+    grid = new FlxBackdrop(FlxGridOverlay.createGrid(80, 80, 160, 160, true, 0x33FFFFFF, 0x0));
+    grid.velocity.set(40, 40);
+    grid.cameras = [PlayState.instance.camOther];
+    grid.alpha = 0;
+    FlxTween.tween(grid, {alpha: 1}, 0.5, {ease: FlxEase.quadOut});
+    add(grid);
     
     noteLeftGroup = new FlxTypedSpriteGroup<StrumNote>();
     noteDownGroup = new FlxTypedSpriteGroup<StrumNote>();
@@ -151,6 +176,9 @@ function onCustomSubstateCreate(name:String) {
     noteUpGroup.cameras = [PlayState.instance.camOther];
     noteRightGroup.cameras = [PlayState.instance.camOther];
     noteGlobalGroup.cameras = [PlayState.instance.camOther];
+    globalText = new FlxText(0, 0, 0, 'Global Colors', 20);
+    globalText.setFormat(Paths.font('vcr.ttf'), 20);
+    globalText.cameras = [PlayState.instance.camOther];
 
     camFollow = new FlxObject(0, 0, 10, 10);
     camFollow.screenCenter();
@@ -172,6 +200,11 @@ function onCustomSubstateCreate(name:String) {
     setupTextCallbacks();
     colorInputBG.y = colorInput.y - 300;
     colorInputBG.x = colorInput.x - 100;
+    
+
+    globalText.x = noteGlobalGroup.members[0].x - 20;
+    globalText.y = noteGlobalGroup.members[0].y + 5;
+    add(globalText);
 }
 
 function setupTextInput() {
@@ -437,7 +470,7 @@ function setupTextCallbacks() {
             case 3:
                 noteRightGroup.members[curSelectedRight].rgbShader.r = FlxColor.fromString('#' + colorInput.text);
                 curColorArrayRight[curSelectedRight] = colorInput.text;
-            case 3:
+            case 4:
                 noteGlobalGroup.members[curSelectedGlobal].rgbShader.r = FlxColor.fromString('#' + colorInput.text);
                 curColorArrayGlobal[curSelectedGlobal] = colorInput.text;
         }
@@ -467,7 +500,7 @@ function setupTextCallbacks() {
             case 3:
                 noteRightGroup.members[curSelectedRight].rgbShader.g = FlxColor.fromString('#' + colorInputWhite.text);
                 curColorArrayRightWhite[curSelectedRight] = colorInputWhite.text;
-            case 3:
+            case 4:
                 noteGlobalGroup.members[curSelectedGlobal].rgbShader.g = FlxColor.fromString('#' + colorInputWhite.text);
                 curColorArrayGlobalWhite[curSelectedGlobal] = colorInputWhite.text;
         }
@@ -497,7 +530,7 @@ function setupTextCallbacks() {
             case 3:
                 noteRightGroup.members[curSelectedRight].rgbShader.b = FlxColor.fromString('#' + colorInputDark.text);
                 curColorArrayRightDark[curSelectedRight] = colorInputDark.text;
-            case 3:
+            case 4:
                 noteGlobalGroup.members[curSelectedGlobal].rgbShader.b = FlxColor.fromString('#' + colorInputDark.text);
                 curColorArrayGlobalDark[curSelectedGlobal] = colorInputDark.text;
         }
@@ -660,6 +693,39 @@ function flushColorTables() {
     }
     trace('Saving Whites: ' + colorString + '\n');
     File.saveContent(path, colorString);
+
+    colorString = '';
+    path = 'mods/randomColors/data/colors/global/colors.txt';
+    for (i in 0...curColorArrayGlobal.length) {
+        if (i != curColorArrayGlobal.length - 1)
+            colorString += curColorArrayGlobal[i] + '\n';
+        if (i == curColorArrayGlobal.length - 1)
+            colorString += curColorArrayGlobal[i];
+    }
+    //trace('Saving: ' + colorString + '\n');
+    File.saveContent(path, colorString);
+
+    colorString = '';
+    path = 'mods/randomColors/data/colors/global/colorsDark.txt';
+    for (i in 0...curColorArrayGlobalDark.length) {
+        if (i != curColorArrayGlobalDark.length - 1)
+            colorString += curColorArrayGlobalDark[i] + '\n';
+        if (i == curColorArrayGlobalDark.length - 1)
+            colorString += curColorArrayGlobalDark[i];
+    }
+    //trace('Saving: ' + colorString + '\n');
+    File.saveContent(path, colorString);
+
+    colorString = '';
+    path = 'mods/randomColors/data/colors/global/colorsWhite.txt';
+    for (i in 0...curColorArrayGlobalWhite.length) {
+        if (i != curColorArrayGlobalWhite.length - 1)
+            colorString += curColorArrayGlobalWhite[i] + '\n';
+        if (i == curColorArrayGlobalWhite.length - 1)
+            colorString += curColorArrayGlobalWhite[i];
+    }
+    trace('Saving Whites: ' + colorString + '\n');
+    File.saveContent(path, colorString);
 }
 
 function checkForInput() {
@@ -811,16 +877,33 @@ function addNote(curSelected:Int = 0) {
                 initialPosGlobal.push(strumNote.y);
             }
     }
+
+    updateTexts(false);
 }
 
 function onCustomSubstateUpdate(name:String, elapsed:Float)
 {
     if (name == 'test') {
-            for (input in inputBlock) {
-                input.update();
-            }
+        PlayState.instance.setSongTime(0);
 
-            checkForInput();
+        checkForInput();
+
+        globalText.text = switch (curSelected) {
+            case 0:
+                'Note Table (Left)';
+            case 1:
+                'Note Table (Down)';
+            case 2:
+                'Note Table (Up)';
+            case 3:
+                'Note Table (Right)';
+            case 4:
+                'Global Table';
+        };
+
+        var offset = curSelected == 4 ? 1 : 2;
+        globalText.x = selector.x - 30 * offset;
+
         if (blockInput && FlxG.keys.justPressed.ENTER) {
             for (input in inputBlock) {
                 input.hasFocus = false;
@@ -971,18 +1054,18 @@ function updateTexts(movedSelector:Bool) {
     }
     
     // Base Color
-    colorInput.text = curColorArrayLeft[switch (curSelected) {
+    colorInput.text = switch (curSelected) {
         case 0:
-            curSelectedLeft;
+            curColorArrayLeft[curSelectedLeft];
         case 1:
-            curSelectedDown;
+            curColorArrayDown[curSelectedDown];
         case 2:
-            curSelectedUp;
+            curColorArrayUp[curSelectedUp];
         case 3:
-            curSelectedRight;
+            curColorArrayRight[curSelectedRight];
         case 4:
-            curSelectedGlobal;
-    }];
+            curColorArrayGlobal[curSelectedGlobal];
+    };
 
     colorInputR.value = acquireRGBArray(switch (curSelected) {
         case 0:
@@ -1022,18 +1105,18 @@ function updateTexts(movedSelector:Bool) {
     })[2];
 
     // Outline Color
-    colorInputDark.text = curColorArrayLeftDark[switch (curSelected) {
+    colorInputDark.text = switch (curSelected) {
         case 0:
-            curSelectedLeft;
+            curColorArrayLeftDark[curSelectedLeft];
         case 1:
-            curSelectedDown;
+            curColorArrayDownDark[curSelectedDown];
         case 2:
-            curSelectedUp;
+            curColorArrayUpDark[curSelectedUp];
         case 3:
-            curSelectedRight;
+            curColorArrayRightDark[curSelectedRight];
         case 4:
-            curSelectedGlobal;
-    }];
+            curColorArrayGlobalDark[curSelectedGlobal];
+    };
     
     colorInputDarkR.value = acquireRGBArray(switch (curSelected) {
         case 0:
@@ -1073,18 +1156,18 @@ function updateTexts(movedSelector:Bool) {
     })[2];
 
     // White Color
-    colorInputWhite.text = curColorArrayLeftWhite[switch (curSelected) {
+    colorInputWhite.text = switch (curSelected) {
         case 0:
-            curSelectedLeft;
+            curColorArrayLeftWhite[curSelectedLeft];
         case 1:
-            curSelectedDown;
+            curColorArrayDownWhite[curSelectedDown];
         case 2:
-            curSelectedUp;
+            curColorArrayUpWhite[curSelectedUp];
         case 3:
-            curSelectedRight;
+            curColorArrayRightWhite[curSelectedRight];
         case 4:
-            curSelectedGlobal;
-    }];
+            curColorArrayGlobalWhite[curSelectedGlobal];
+    };
 
     colorInputWhiteR.value = acquireRGBArray(switch (curSelected) {
         case 0:

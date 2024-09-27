@@ -15,7 +15,7 @@ function onCreate()
 end
 
 function onSongStart()
-    openCustomSubstate('test', true)
+    openCustomSubstate('test', false)
 end
 
 function leave()
