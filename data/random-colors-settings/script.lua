@@ -18,22 +18,15 @@ function onSongStart()
     openCustomSubstate('test', true)
 end
 
-startRunning = false
-count = 0
-restart = false
-function onCustomSubstateUpdate(name, elapsed)
-     if keyboardJustPressed('BACKSPACE') and name == 'test' then
-            exitSong(false)
-     end
-     if keyboardJustPressed('R') and name == 'test' then
-            restart()
-     end
+function leave()
+    exitSong(false)
 end
 
 function restart()
         loadColorsToFile()
         restartSong(false)
 end
+
 local filePaths = {
     'global/colors',
     'global/colorsDark',

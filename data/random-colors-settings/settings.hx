@@ -17,6 +17,8 @@ import states.PlayState;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import flixel.addons.ui.FlxUIInputText;
+import flixel.addons.ui.FlxUI;
+import flixel.addons.ui.FlxUITabMenu;
 
 using StringTools;
 
@@ -86,8 +88,22 @@ var paths:Array<String> = [
     'right/colorsDark',
     'right/colorsWhite'
 ];
+var canMove:Bool = true;
+var canMoveSelector:Bool = true;
+var initialPosLeft:Array<Int> = [];
+var initialPosDown:Array<Int> = [];
+var initialPosUp:Array<Int> = [];
+var initialPosRight:Array<Int> = [];
+var initialPosGlobal:Array<Int> = [];
+
+var inputBlock:Array<FlxUIInputText> = [];
+var blockInput:Bool = false;
+var colorInput:FlxUIInputText;
+var colorInputDark:FlxUIInputText;
+var colorInputWhite:FlxUIInputText;
 
 function onCustomSubstateCreate(name:String) {
+    FlxG.mouse.visible = true;
     controls = Controls.instance;
     doFileCheck();
     setupArrays();
@@ -151,6 +167,46 @@ function onCustomSubstateCreate(name:String) {
     selector2.x = noteLeftGroup.members[0].x + 22;
     selector2.antialiasing = ClientPrefs.data.antialiasing;
     add(selector2);
+
+    colorInput = new FlxUIInputText(0, 0, 100, curColorArrayLeft[0]);
+    colorInput.cameras = [PlayState.instance.camOther];
+    colorInput.screenCenter();
+    colorInput.y += -500;
+    colorInput.x += 500;
+    add(colorInput);
+    var colorText = new FlxText(0, 0, 0, 'Note Color', 10);
+    colorText.y = colorInput.y - 20;
+    colorText.x = colorInput.x;
+    colorText.cameras = [PlayState.instance.camOther];
+    add(colorText);
+
+    colorInputDark = new FlxUIInputText(0, 0, 100, curColorArrayLeftDark[0]);
+    colorInputDark.cameras = [PlayState.instance.camOther];
+    colorInputDark.screenCenter();
+    colorInputDark.y += -400;
+    colorInputDark.x += 500;
+    add(colorInputDark);
+    var colorText = new FlxText(0, 0, 0, 'Note Color (Outline)', 10);
+    colorText.y = colorInputDark.y - 20;
+    colorText.x = colorInputDark.x;
+    colorText.cameras = [PlayState.instance.camOther];
+    add(colorText);
+
+    colorInputWhite = new FlxUIInputText(0, 0, 100, curColorArrayLeftWhite[0]);
+    colorInputWhite.cameras = [PlayState.instance.camOther];
+    colorInputWhite.screenCenter();
+    colorInputWhite.y += -300;
+    colorInputWhite.x += 500;
+    add(colorInputWhite);
+    var colorText = new FlxText(0, 0, 0, 'Note Color (White Area)', 10);
+    colorText.y = colorInputWhite.y - 20;
+    colorText.x = colorInputWhite.x;
+    colorText.cameras = [PlayState.instance.camOther];
+    add(colorText);
+
+    inputBlock.push(colorInput);
+    inputBlock.push(colorInputDark);
+    inputBlock.push(colorInputWhite);
 }
 
 function setupArrays() {
@@ -173,11 +229,98 @@ function setupArrays() {
     curColorArrayGlobalWhite = File.getContent('mods/randomColors/data/colors/global/colorsWhite.txt').split('\n');
 }
 
+function flushColorTables() {
+
+    var colorString:String = '';
+    var path:String = 'mods/randomColors/data/colors/left/colors.txt';
+    for (i in 0...curColorArrayLeft.length) {
+        if (i != curColorArrayLeft.length - 1)
+            colorString += curColorArrayLeft[i] + '\n';
+        if (i == curColorArrayLeft.length - 1)
+            colorString += curColorArrayLeft[i];
+    }
+    trace(colorString);
+    File.saveContent(path, colorString);
+
+    colorString = '';
+    path = 'mods/randomColors/data/colors/left/colorsDark.txt';
+    for (i in 0...curColorArrayLeftDark.length) {
+        if (i != curColorArrayLeftDark.length - 1)
+            colorString += curColorArrayLeftDark[i] + '\n';
+        if (i == curColorArrayLeftDark.length - 1)
+            colorString += curColorArrayLeftDark[i];
+    }
+    trace(colorString);
+    File.saveContent(path, colorString);
+
+    colorString = '';
+    path = 'mods/randomColors/data/colors/left/colorsWhite.txt';
+    for (i in 0...curColorArrayLeftWhite.length) {
+        if (i != curColorArrayLeftWhite.length - 1)
+            colorString += curColorArrayLeftWhite[i] + '\n';
+        if (i == curColorArrayLeftWhite.length - 1)
+            colorString += curColorArrayLeftWhite[i];
+    }
+    trace(colorString);
+    File.saveContent(path, colorString);
+}
+
+function checkForInput() {
+    for (input in inputBlock) {
+        if (input.hasFocus) {
+            blockInput = true;
+            return;
+        }
+    }
+}
+
 function onCustomSubstateUpdate(name:String, elapsed:Float)
 {
     if (name == 'test') {
+            colorInput.update(elapsed);
+            colorInputDark.update(elapsed);
+            colorInputWhite.update(elapsed);
+
+            checkForInput();
+
+        if (!blockInput) {
+            if (controls.BACK) {
+                game.callOnLuas('leave');
+            }
+            if (controls.RESET) {
+                game.callOnLuas('restart');
+            }
+        }
+        if (blockInput && FlxG.keys.justPressed.ENTER) {
+            for (input in inputBlock) {
+                input.hasFocus = false;
+                blockInput = false;
+            }
+        }
         if (controls.ACCEPT)
-            game.callOnLuas('openSubState', 'noteColorSelectorSubState');
+            switch(curSelected) {
+                case 0:
+                    if (noteLeftGroup.members[curSelectedLeft].animation.curAnim.name == 'addNote')
+                    {
+                        curColorArrayLeft.push('FF7700');
+                        curColorArrayLeftWhite.push('FFFFFF');
+                        curColorArrayLeftDark.push('801C00');
+                        var strumNote = new StrumNote(FlxG.width * 0.15, 120 * noteLeftGroup.members.length, 0, 1);
+                        strumNote.rgbShader.enabled = true;
+                        strumNote.rgbShader.r = FlxColor.fromString('#FF7700');
+                        strumNote.rgbShader.g = FlxColor.fromString('#FFFFFF');
+                        strumNote.rgbShader.b = FlxColor.fromString('#801C00');
+                        strumNote.animation.addByPrefix('purble', 'purple', 0);
+                        strumNote.animation.play('purble');
+                        noteLeftGroup.add(strumNote);
+                        initialPosLeft.push(strumNote.y);
+                        var variable = (120 * (noteLeftGroup.members.length-1 % 4)) - 120;
+                        strumNote.y += -variable;
+                        strumNote.offset.y = -55;
+                        strumNote.alpha = 0.5;
+                        flushColorTables();
+                    }
+            }
 
         if (controls.UI_LEFT_P)
             changeSelection(-1, 0);
@@ -256,20 +399,7 @@ function setAlpha() {
     }
 }
 
-/**
-var curSelectedLeft:Int = 0;
-var curSelectedDown:Int = 0;
-var curSelectedUp:Int = 0;
-var curSelectedRight:Int = 0;
-var curSelectedGlobal:Int = 0; 
- */
- var canMove:Bool = true;
- var canMoveSelector:Bool = true;
- var initialPosLeft:Array<Int> = [];
- var initialPosDown:Array<Int> = [];
- var initialPosUp:Array<Int> = [];
- var initialPosRight:Array<Int> = [];
- var initialPosGlobal:Array<Int> = [];
+
 function changeSelection(change:Int = 0, direction:Int = 0) {
     if (canMove) {
         var mustRevert:Bool = false;
@@ -294,6 +424,11 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                             FlxTween.tween(selector2, {x: noteLeftGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                                 canMoveSelector = true;
                             }});
+
+                            colorInput.text = curColorArrayLeft[curSelectedLeft];
+                            colorInputDark.text = curColorArrayLeftDark[curSelectedLeft];
+                            colorInputWhite.text = curColorArrayLeftWhite[curSelectedLeft];
+
                         case 1:
                             canMoveSelector = false;
                             FlxTween.tween(selector, {x: noteDownGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
@@ -302,6 +437,11 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                             FlxTween.tween(selector2, {x: noteDownGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                                 canMoveSelector = true;
                             }});
+
+                            colorInput.text = curColorArrayDown[curSelectedDown];
+                            colorInputDark.text = curColorArrayDownDark[curSelectedDown];
+                            colorInputWhite.text = curColorArrayDownWhite[curSelectedDown];
+
                         case 2:
                             canMoveSelector = false;
                             FlxTween.tween(selector, {x: noteUpGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
@@ -310,6 +450,11 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                             FlxTween.tween(selector2, {x: noteUpGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                                 canMoveSelector = true;
                             }});
+
+                            colorInput.text = curColorArrayUp[curSelectedUp];
+                            colorInputDark.text = curColorArrayUpDark[curSelectedUp];
+                            colorInputWhite.text = curColorArrayUpWhite[curSelectedUp];
+
                         case 3:
                             canMoveSelector = false;
                             FlxTween.tween(selector, {x: noteRightGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
@@ -318,6 +463,11 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                             FlxTween.tween(selector2, {x: noteRightGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                                 canMoveSelector = true;
                             }});
+
+                            colorInput.text = curColorArrayRight[curSelectedRight];
+                            colorInputDark.text = curColorArrayRightDark[curSelectedRight];
+                            colorInputWhite.text = curColorArrayRightWhite[curSelectedRight];
+
                         case 4:
                             canMoveSelector = false;
                             FlxTween.tween(selector, {x: noteGlobalGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
@@ -326,6 +476,10 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                             FlxTween.tween(selector2, {x: noteGlobalGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
                                 canMoveSelector = true;
                             }});
+
+                            colorInput.text = curColorArrayGlobal[curSelectedGlobal];
+                            colorInputDark.text = curColorArrayGlobalDark[curSelectedGlobal];
+                            colorInputWhite.text = curColorArrayGlobalWhite[curSelectedGlobal];
                     }
                 }
 
@@ -342,6 +496,9 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                 }
 
                 canMove = false;
+                colorInput.text = curColorArrayLeft[curSelectedLeft];
+                colorInputDark.text = curColorArrayLeftDark[curSelectedLeft];
+                colorInputWhite.text = curColorArrayLeftWhite[curSelectedLeft];
 
                 for (i in 0...noteLeftGroup.members.length) {
                     if (curSelectedLeft != i) {
@@ -394,6 +551,9 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                 }
 
                 canMove = false;
+                colorInput.text = curColorArrayDown[curSelectedDown];
+                colorInputDark.text = curColorArrayDownDark[curSelectedDown];
+                colorInputWhite.text = curColorArrayDownWhite[curSelectedDown];
 
                 
                 for (i in 0...noteDownGroup.members.length) {
@@ -446,6 +606,9 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                 }
 
                 canMove = false;
+                colorInput.text = curColorArrayUp[curSelectedUp];
+                colorInputDark.text = curColorArrayUpDark[curSelectedUp];
+                colorInputWhite.text = curColorArrayUpWhite[curSelectedUp];
 
                 for (i in 0...noteUpGroup.members.length) {
                     if (curSelectedUp != i) {
@@ -497,6 +660,9 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                 }
 
                 canMove = false;
+                colorInput.text = curColorArrayRight[curSelectedRight];
+                colorInputDark.text = curColorArrayRightDark[curSelectedRight];
+                colorInputWhite.text = curColorArrayRightWhite[curSelectedRight];
 
                 for (i in 0...noteRightGroup.members.length) {
                     if (curSelectedRight != i) {
@@ -548,6 +714,9 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                 }
 
                 canMove = false;
+                colorInput.text = curColorArrayGlobal[curSelectedGlobal];
+                colorInputDark.text = curColorArrayGlobalDark[curSelectedGlobal];
+                colorInputWhite.text = curColorArrayGlobalWhite[curSelectedGlobal];
 
                 for (i in 0...noteGlobalGroup.members.length) {
                     if (curSelectedGlobal != i) {
