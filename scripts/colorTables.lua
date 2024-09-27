@@ -1,9 +1,6 @@
 -- Default values for all tables!
 
 globalTable = {
-	'FF7700',
-	'FFB300',
-	'C24B99',
 	'00FFFF',
 	'12FA05',
 	'F9393F'
@@ -12,16 +9,10 @@ globalTable = {
 globalTableWhite = {
 	'FFFFFF',
 	'FFFFFF',
-	'FFFFFF',
-	'FFFFFF',
-	'FFFFFF',
 	'FFFFFF'
 }
 
 globalTableDark = {
-	'801C00',
-	'C14100',
-	'3C1F56',
 	'1542B7',
 	'0A4447',
 	'651038'
