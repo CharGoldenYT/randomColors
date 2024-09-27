@@ -1,3 +1,4 @@
+// This 1 file is so damn big lmao.
 import backend.Paths;
 import backend.Mods;
 import backend.Controls;
@@ -207,6 +208,102 @@ function onCustomSubstateCreate(name:String) {
     inputBlock.push(colorInput);
     inputBlock.push(colorInputDark);
     inputBlock.push(colorInputWhite);
+
+    setupTextCallbacks();
+}
+
+function setupTextCallbacks() {
+
+    colorInput.callback = function(value:String) {
+        if (colorInput.text.length > 6) {
+            var array = colorInput.text.split();
+            var string = '';
+            for (i in 0...6) {
+                string += array[i];
+            }
+            colorInput.text = string;
+        }
+        switch(curSelected) {
+            case 0:
+                noteLeftGroup.members[curSelectedLeft].rgbShader.r = FlxColor.fromString('#' + colorInput.text);
+                curColorArrayLeft[curSelectedLeft] = colorInput.text;
+            case 1:
+                noteDownGroup.members[curSelectedDown].rgbShader.r = FlxColor.fromString('#' + colorInput.text);
+                curColorArrayDown[curSelectedDown] = colorInput.text;
+            case 2:
+                noteUpGroup.members[curSelectedUp].rgbShader.r = FlxColor.fromString('#' + colorInput.text);
+                curColorArrayUp[curSelectedUp] = colorInput.text;
+            case 3:
+                noteRightGroup.members[curSelectedRight].rgbShader.r = FlxColor.fromString('#' + colorInput.text);
+                curColorArrayRight[curSelectedRight] = colorInput.text;
+            case 3:
+                noteGlobalGroup.members[curSelectedGlobal].rgbShader.r = FlxColor.fromString('#' + colorInput.text);
+                curColorArrayGlobal[curSelectedGlobal] = colorInput.text;
+        }
+        if (colorInput.text.length == 6)
+            flushColorTables();
+    }
+
+    colorInputWhite.callback = function(value:String) {
+        if (colorInputWhite.text.length > 6) {
+            var array = colorInputWhite.text.split();
+            var string = '';
+            for (i in 0...6) {
+                string += array[i];
+            }
+            colorInputWhite.text = string;
+        }
+        switch(curSelected) {
+            case 0:
+                noteLeftGroup.members[curSelectedLeft].rgbShader.g = FlxColor.fromString('#' + colorInputWhite.text);
+                curColorArrayLeftWhite[curSelectedLeft] = colorInputWhite.text;
+            case 1:
+                noteDownGroup.members[curSelectedDown].rgbShader.g = FlxColor.fromString('#' + colorInputWhite.text);
+                curColorArrayDownWhite[curSelectedDown] = colorInputWhite.text;
+            case 2:
+                noteUpGroup.members[curSelectedUp].rgbShader.g = FlxColor.fromString('#' + colorInputWhite.text);
+                curColorArrayUpWhite[curSelectedUp] = colorInputWhite.text;
+            case 3:
+                noteRightGroup.members[curSelectedRight].rgbShader.g = FlxColor.fromString('#' + colorInputWhite.text);
+                curColorArrayRightWhite[curSelectedRight] = colorInputWhite.text;
+            case 3:
+                noteGlobalGroup.members[curSelectedGlobal].rgbShader.g = FlxColor.fromString('#' + colorInputWhite.text);
+                curColorArrayGlobalWhite[curSelectedGlobal] = colorInputWhite.text;
+        }
+        if (colorInputWhite.text.length == 6)
+            flushColorTables();
+    }
+
+    colorInputDark.callback = function(value:String) {
+        if (colorInputDark.text.length > 6) {
+            var array = colorInputDark.text.split();
+            var string = '';
+            for (i in 0...6) {
+                string += array[i];
+            }
+            colorInputDark.text = string;
+        }
+        switch(curSelected) {
+            case 0:
+                noteLeftGroup.members[curSelectedLeft].rgbShader.b = FlxColor.fromString('#' + colorInputDark.text);
+                curColorArrayLeftDark[curSelectedLeft] = colorInputDark.text;
+            case 1:
+                noteDownGroup.members[curSelectedDown].rgbShader.b = FlxColor.fromString('#' + colorInputDark.text);
+                curColorArrayDownDark[curSelectedDown] = colorInputDark.text;
+            case 2:
+                noteUpGroup.members[curSelectedUp].rgbShader.b = FlxColor.fromString('#' + colorInputDark.text);
+                curColorArrayUpDark[curSelectedUp] = colorInputDark.text;
+            case 3:
+                noteRightGroup.members[curSelectedRight].rgbShader.b = FlxColor.fromString('#' + colorInputDark.text);
+                curColorArrayRightDark[curSelectedRight] = colorInputDark.text;
+            case 3:
+                noteGlobalGroup.members[curSelectedGlobal].rgbShader.b = FlxColor.fromString('#' + colorInputDark.text);
+                curColorArrayGlobalDark[curSelectedGlobal] = colorInputDark.text;
+        }
+        if (colorInputDark.text.length == 6)
+            flushColorTables();
+    }
+
 }
 
 function setupArrays() {
@@ -230,7 +327,7 @@ function setupArrays() {
 }
 
 function flushColorTables() {
-
+    trace('Saving Color Data!');
     var colorString:String = '';
     var path:String = 'mods/randomColors/data/colors/left/colors.txt';
     for (i in 0...curColorArrayLeft.length) {
@@ -239,7 +336,7 @@ function flushColorTables() {
         if (i == curColorArrayLeft.length - 1)
             colorString += curColorArrayLeft[i];
     }
-    trace(colorString);
+    //trace('Saving: ' + colorString + '\n');
     File.saveContent(path, colorString);
 
     colorString = '';
@@ -250,7 +347,7 @@ function flushColorTables() {
         if (i == curColorArrayLeftDark.length - 1)
             colorString += curColorArrayLeftDark[i];
     }
-    trace(colorString);
+    //trace('Saving: ' + colorString + '\n');
     File.saveContent(path, colorString);
 
     colorString = '';
@@ -261,16 +358,166 @@ function flushColorTables() {
         if (i == curColorArrayLeftWhite.length - 1)
             colorString += curColorArrayLeftWhite[i];
     }
-    trace(colorString);
+    trace('Saving Whites: ' + colorString + '\n');
+    File.saveContent(path, colorString);
+
+    colorString = '';
+    path = 'mods/randomColors/data/colors/down/colors.txt';
+    for (i in 0...curColorArrayDown.length) {
+        if (i != curColorArrayDown.length - 1)
+            colorString += curColorArrayDown[i] + '\n';
+        if (i == curColorArrayDown.length - 1)
+            colorString += curColorArrayDown[i];
+    }
+   // trace('Saving: ' + colorString + '\n');
+    File.saveContent(path, colorString);
+
+    colorString = '';
+    path = 'mods/randomColors/data/colors/down/colorsDark.txt';
+    for (i in 0...curColorArrayDownDark.length) {
+        if (i != curColorArrayDownDark.length - 1)
+            colorString += curColorArrayDownDark[i] + '\n';
+        if (i == curColorArrayDownDark.length - 1)
+            colorString += curColorArrayDownDark[i];
+    }
+    //trace('Saving: ' + colorString + '\n');
+    File.saveContent(path, colorString);
+
+    colorString = '';
+    path = 'mods/randomColors/data/colors/down/colorsWhite.txt';
+    for (i in 0...curColorArrayDownWhite.length) {
+        if (i != curColorArrayDownWhite.length - 1)
+            colorString += curColorArrayDownWhite[i] + '\n';
+        if (i == curColorArrayDownWhite.length - 1)
+            colorString += curColorArrayDownWhite[i];
+    }
+    trace('Saving Whites: ' + colorString + '\n');
+    File.saveContent(path, colorString);
+
+    colorString = '';
+    path = 'mods/randomColors/data/colors/up/colors.txt';
+    for (i in 0...curColorArrayUp.length) {
+        if (i != curColorArrayUp.length - 1)
+            colorString += curColorArrayUp[i] + '\n';
+        if (i == curColorArrayUp.length - 1)
+            colorString += curColorArrayUp[i];
+    }
+    //trace('Saving: ' + colorString + '\n');
+    File.saveContent(path, colorString);
+
+    colorString = '';
+    path = 'mods/randomColors/data/colors/up/colorsDark.txt';
+    for (i in 0...curColorArrayUpDark.length) {
+        if (i != curColorArrayUpDark.length - 1)
+            colorString += curColorArrayUpDark[i] + '\n';
+        if (i == curColorArrayUpDark.length - 1)
+            colorString += curColorArrayUpDark[i];
+    }
+    //trace('Saving: ' + colorString + '\n');
+    File.saveContent(path, colorString);
+
+    colorString = '';
+    path = 'mods/randomColors/data/colors/up/colorsWhite.txt';
+    for (i in 0...curColorArrayUpWhite.length) {
+        if (i != curColorArrayUpWhite.length - 1)
+            colorString += curColorArrayUpWhite[i] + '\n';
+        if (i == curColorArrayUpWhite.length - 1)
+            colorString += curColorArrayUpWhite[i];
+    }
+    trace('Saving Whites: ' + colorString + '\n');
+    File.saveContent(path, colorString);
+
+    colorString = '';
+    path = 'mods/randomColors/data/colors/right/colors.txt';
+    for (i in 0...curColorArrayRight.length) {
+        if (i != curColorArrayRight.length - 1)
+            colorString += curColorArrayRight[i] + '\n';
+        if (i == curColorArrayRight.length - 1)
+            colorString += curColorArrayRight[i];
+    }
+    //trace('Saving: ' + colorString + '\n');
+    File.saveContent(path, colorString);
+
+    colorString = '';
+    path = 'mods/randomColors/data/colors/right/colorsDark.txt';
+    for (i in 0...curColorArrayRightDark.length) {
+        if (i != curColorArrayRightDark.length - 1)
+            colorString += curColorArrayRightDark[i] + '\n';
+        if (i == curColorArrayRightDark.length - 1)
+            colorString += curColorArrayRightDark[i];
+    }
+    //trace('Saving: ' + colorString + '\n');
+    File.saveContent(path, colorString);
+
+    colorString = '';
+    path = 'mods/randomColors/data/colors/right/colorsWhite.txt';
+    for (i in 0...curColorArrayRightWhite.length) {
+        if (i != curColorArrayRightWhite.length - 1)
+            colorString += curColorArrayRightWhite[i] + '\n';
+        if (i == curColorArrayRightWhite.length - 1)
+            colorString += curColorArrayRightWhite[i];
+    }
+    trace('Saving Whites: ' + colorString + '\n');
     File.saveContent(path, colorString);
 }
 
 function checkForInput() {
+    var inputBlocked:Array<Bool> = [];
     for (input in inputBlock) {
+            inputBlocked.push(input.hasFocus);
         if (input.hasFocus) {
             blockInput = true;
             return;
         }
+    }
+    blockInput = false;
+}
+
+                /*curColorArrayLeft.push('FF7700');
+                curColorArrayLeftWhite.push('FFFFFF');
+                curColorArrayLeftDark.push('801C00');
+                var strumNote = new StrumNote(FlxG.width * 0.15, 120 * noteLeftGroup.members.length, 0, 1);
+                strumNote.rgbShader.enabled = true;
+                noteLeftGroup.add(strumNote);
+                initialPosLeft.push(strumNote.y);
+                var variable = (120 * (noteLeftGroup.members.length-1 % 4)) - 120;
+                strumNote.y += -variable;
+                strumNote.offset.y = -55;
+                strumNote.alpha = 0.5;
+                flushColorTables();
+                var strumNote = new StrumNote(FlxG.width * 0.55, 120 * noteGlobalGroup.members.length, 0, 1);
+                strumNote.texture = 'color_select_essentials';
+                strumNote.animation.addByPrefix('addNote', 'grey', 0);
+                strumNote.animation.play('addNote');
+                noteGlobalGroup.add(strumNote);
+                initialPosGlobal.push(strumNote.y);*/
+function addNote(curSelected:Int = 0) {
+    switch(curSelected) {
+        case 0:
+            if (noteLeftGroup.members[curSelectedLeft].animation.curAnim.name == 'addNote')
+            {
+                curColorArrayLeft.push('FF7700');
+                curColorArrayLeftWhite.push('FFFFFF');
+                curColorArrayLeftDark.push('801C00');
+                noteLeftGroup.members[curSelectedLeft].texture = 'noteSkins/NOTE_assets';
+                noteLeftGroup.members[curSelectedLeft].rgbShader.enabled = true;
+                noteLeftGroup.members[curSelectedLeft].rgbShader.r = FlxColor.fromString('#FF7700');
+                noteLeftGroup.members[curSelectedLeft].rgbShader.g = FlxColor.fromString('#FFFFFF');
+                noteLeftGroup.members[curSelectedLeft].rgbShader.b = FlxColor.fromString('#801C00');
+                noteLeftGroup.members[curSelectedLeft].animation.addByPrefix('purble', 'purple', 0);
+                noteLeftGroup.members[curSelectedLeft].animation.play('purble');
+                var strumNote = new StrumNote(FlxG.width * 0.15, 120 * noteGlobalGroup.members.length, 0, 1);
+                strumNote.texture = 'color_select_essentials';
+                strumNote.animation.addByPrefix('addNote', 'purple', 0);
+                strumNote.animation.play('addNote');
+                var variable = (120 * (noteLeftGroup.members.length-1 % 4)) - 120;
+                strumNote.y += -variable;
+                strumNote.offset.y = -55;
+                strumNote.alpha = 0.5;
+                flushColorTables();
+                noteLeftGroup.add(strumNote);
+                initialPosLeft.push(strumNote.y);
+            }
     }
 }
 
@@ -290,7 +537,7 @@ function onCustomSubstateUpdate(name:String, elapsed:Float)
         }
 
         if (!blockInput) {
-            
+
             if (controls.BACK) {
                 game.callOnLuas('leave');
             }
@@ -300,29 +547,7 @@ function onCustomSubstateUpdate(name:String, elapsed:Float)
             }
 
             if (controls.ACCEPT) {
-                switch(curSelected) {
-                    case 0:
-                        if (noteLeftGroup.members[curSelectedLeft].animation.curAnim.name == 'addNote')
-                        {
-                            curColorArrayLeft.push('FF7700');
-                            curColorArrayLeftWhite.push('FFFFFF');
-                            curColorArrayLeftDark.push('801C00');
-                            var strumNote = new StrumNote(FlxG.width * 0.15, 120 * noteLeftGroup.members.length, 0, 1);
-                            strumNote.rgbShader.enabled = true;
-                            strumNote.rgbShader.r = FlxColor.fromString('#FF7700');
-                            strumNote.rgbShader.g = FlxColor.fromString('#FFFFFF');
-                            strumNote.rgbShader.b = FlxColor.fromString('#801C00');
-                            strumNote.animation.addByPrefix('purble', 'purple', 0);
-                            strumNote.animation.play('purble');
-                            noteLeftGroup.add(strumNote);
-                            initialPosLeft.push(strumNote.y);
-                            var variable = (120 * (noteLeftGroup.members.length-1 % 4)) - 120;
-                            strumNote.y += -variable;
-                            strumNote.offset.y = -55;
-                            strumNote.alpha = 0.5;
-                            flushColorTables();
-                        }
-                }
+                addNote(curSelected);
             }
 
             if (controls.UI_LEFT_P)
