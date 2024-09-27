@@ -384,6 +384,9 @@ function acquireRGBArray(str:String):Array<Int>
     var hex1 = '';
     var hex2 = '';
     var hex3 = '';
+    if (str == null) {
+        str = '000000';
+    }
     var hex = str.split();
     for (i in 0...6) {
         if (i < 2) {
@@ -395,7 +398,7 @@ function acquireRGBArray(str:String):Array<Int>
         if (i >= 4) {
             hex3 = hex[i];
         }
-        trace('Cur Hex: ' + hex[i]);
+        //trace('Cur Hex: ' + hex[i]);
     }
     for (i in 0...3) {
         RGBArray.push(switch (i) {
@@ -673,6 +676,7 @@ function checkForInput() {
 
 function addNote(curSelected:Int = 0) {
     switch(curSelected) {
+        
         case 0:
             if (noteLeftGroup.members[curSelectedLeft].animation.curAnim.name == 'addNote')
             {
@@ -686,17 +690,125 @@ function addNote(curSelected:Int = 0) {
                 noteLeftGroup.members[curSelectedLeft].rgbShader.b = FlxColor.fromString('#801C00');
                 noteLeftGroup.members[curSelectedLeft].animation.addByPrefix('purble', 'purple', 0);
                 noteLeftGroup.members[curSelectedLeft].animation.play('purble');
-                var strumNote = new StrumNote(FlxG.width * 0.15, 120 * noteGlobalGroup.members.length, 0, 1);
+                noteDownGroup.members[curSelectedLeft].offset.y = 0;
+                var strumNote = new StrumNote(noteLeftGroup.members[curSelectedLeft].x, 120 * noteLeftGroup.members.length, 0, 1);
                 strumNote.texture = 'color_select_essentials';
                 strumNote.animation.addByPrefix('addNote', 'purple', 0);
                 strumNote.animation.play('addNote');
+                noteLeftGroup.add(strumNote);
                 var variable = (120 * (noteLeftGroup.members.length-1 % 4)) - 120;
                 strumNote.y += -variable;
                 strumNote.offset.y = -55;
                 strumNote.alpha = 0.5;
                 flushColorTables();
-                noteLeftGroup.add(strumNote);
                 initialPosLeft.push(strumNote.y);
+            }
+
+        case 1:
+            if (noteDownGroup.members[curSelectedDown].animation.curAnim.name == 'addNote')
+            {
+                curColorArrayDown.push('FF7700');
+                curColorArrayDownWhite.push('FFFFFF');
+                curColorArrayDownDark.push('801C00');
+                noteDownGroup.members[curSelectedDown].texture = 'noteSkins/NOTE_assets' + game.callOnLuas('getNotePostfix');
+                noteDownGroup.members[curSelectedDown].rgbShader.enabled = true;
+                noteDownGroup.members[curSelectedDown].rgbShader.r = FlxColor.fromString('#FF7700');
+                noteDownGroup.members[curSelectedDown].rgbShader.g = FlxColor.fromString('#FFFFFF');
+                noteDownGroup.members[curSelectedDown].rgbShader.b = FlxColor.fromString('#801C00');
+                noteDownGroup.members[curSelectedDown].animation.addByPrefix('purble', 'blue', 0);
+                noteDownGroup.members[curSelectedDown].animation.play('purble');
+                noteDownGroup.members[curSelectedDown].offset.y = 0;
+                var strumNote = new StrumNote(noteDownGroup.members[curSelectedDown].x, 120 * noteDownGroup.members.length, 0, 1);
+                strumNote.texture = 'color_select_essentials';
+                strumNote.animation.addByPrefix('addNote', 'blue', 0);
+                strumNote.animation.play('addNote');
+                noteDownGroup.add(strumNote);
+                var variable = (120 * (noteDownGroup.members.length-1 % 4)) - 120;
+                strumNote.y += -variable;
+                strumNote.offset.y = -55;
+                strumNote.alpha = 0.5;
+                flushColorTables();
+                initialPosDown.push(strumNote.y);
+            }
+
+        case 2:
+            if (noteUpGroup.members[curSelectedUp].animation.curAnim.name == 'addNote')
+            {
+                curColorArrayUp.push('FF7700');
+                curColorArrayUpWhite.push('FFFFFF');
+                curColorArrayUpDark.push('801C00');
+                noteUpGroup.members[curSelectedUp].texture = 'noteSkins/NOTE_assets' + game.callOnLuas('getNotePostfix');
+                noteUpGroup.members[curSelectedUp].rgbShader.enabled = true;
+                noteUpGroup.members[curSelectedUp].rgbShader.r = FlxColor.fromString('#FF7700');
+                noteUpGroup.members[curSelectedUp].rgbShader.g = FlxColor.fromString('#FFFFFF');
+                noteUpGroup.members[curSelectedUp].rgbShader.b = FlxColor.fromString('#801C00');
+                noteUpGroup.members[curSelectedUp].animation.addByPrefix('purble', 'green', 0);
+                noteUpGroup.members[curSelectedUp].animation.play('purble');
+                noteUpGroup.members[curSelectedUp].offset.y = 0;
+                var strumNote = new StrumNote(noteUpGroup.members[curSelectedUp].x, 120 * noteUpGroup.members.length, 0, 1);
+                strumNote.texture = 'color_select_essentials';
+                strumNote.animation.addByPrefix('addNote', 'green', 0);
+                strumNote.animation.play('addNote');
+                noteUpGroup.add(strumNote);
+                var variable = (120 * (noteUpGroup.members.length-1 % 4)) - 120;
+                strumNote.y += -variable;
+                strumNote.offset.y = -55;
+                strumNote.alpha = 0.5;
+                flushColorTables();
+                initialPosUp.push(strumNote.y);
+            }
+
+        case 3:
+            if (noteRightGroup.members[curSelectedRight].animation.curAnim.name == 'addNote')
+            {
+                curColorArrayRight.push('FF7700');
+                curColorArrayRightWhite.push('FFFFFF');
+                curColorArrayRightDark.push('801C00');
+                noteRightGroup.members[curSelectedRight].texture = 'noteSkins/NOTE_assets' + game.callOnLuas('getNotePostfix');
+                noteRightGroup.members[curSelectedRight].rgbShader.enabled = true;
+                noteRightGroup.members[curSelectedRight].rgbShader.r = FlxColor.fromString('#FF7700');
+                noteRightGroup.members[curSelectedRight].rgbShader.g = FlxColor.fromString('#FFFFFF');
+                noteRightGroup.members[curSelectedRight].rgbShader.b = FlxColor.fromString('#801C00');
+                noteRightGroup.members[curSelectedRight].animation.addByPrefix('purble', 'red', 0);
+                noteRightGroup.members[curSelectedRight].animation.play('purble');
+                noteRightGroup.members[curSelectedRight].offset.y = 0;
+                var strumNote = new StrumNote(noteRightGroup.members[curSelectedRight].x, 120 * noteRightGroup.members.length, 0, 1);
+                strumNote.texture = 'color_select_essentials';
+                strumNote.animation.addByPrefix('addNote', 'red', 0);
+                strumNote.animation.play('addNote');
+                noteRightGroup.add(strumNote);
+                var variable = (120 * (noteRightGroup.members.length-1 % 4)) - 120;
+                strumNote.y += -variable;
+                strumNote.offset.y = -55;
+                strumNote.alpha = 0.5;
+                flushColorTables();
+                initialPosRight.push(strumNote.y);
+            }
+
+        case 4:
+            if (noteGlobalGroup.members[curSelectedGlobal].animation.curAnim.name == 'addNote')
+            {
+                curColorArrayGlobal.push('FF7700');
+                curColorArrayGlobalWhite.push('FFFFFF');
+                curColorArrayGlobalDark.push('801C00');
+                noteGlobalGroup.members[curSelectedGlobal].rgbShader.enabled = true;
+                noteGlobalGroup.members[curSelectedGlobal].rgbShader.r = FlxColor.fromString('#FF7700');
+                noteGlobalGroup.members[curSelectedGlobal].rgbShader.g = FlxColor.fromString('#FFFFFF');
+                noteGlobalGroup.members[curSelectedGlobal].rgbShader.b = FlxColor.fromString('#801C00');
+                noteGlobalGroup.members[curSelectedGlobal].animation.addByPrefix('purble', 'grey rgb', 0);
+                noteGlobalGroup.members[curSelectedGlobal].animation.play('purble');
+                noteGlobalGroup.members[curSelectedGlobal].offset.y = 0;
+                var strumNote = new StrumNote(noteGlobalGroup.members[curSelectedGlobal].x, 120 * noteGlobalGroup.members.length, 0, 1);
+                strumNote.texture = 'color_select_essentials';
+                strumNote.animation.addByPrefix('addNote', 'grey', 0);
+                strumNote.animation.play('addNote');
+                noteGlobalGroup.add(strumNote);
+                var variable = (120 * (noteGlobalGroup.members.length-1 % 4)) - 120;
+                strumNote.y += -variable;
+                strumNote.offset.y = -55;
+                strumNote.alpha = 0.5;
+                flushColorTables();
+                initialPosGlobal.push(strumNote.y);
             }
     }
 }
@@ -808,6 +920,209 @@ function setAlpha() {
     }
 }
 
+function updateTexts(movedSelector:Bool) {
+    if (movedSelector) {
+        switch (curSelected) {
+            case 0:
+                canMoveSelector = false;
+                FlxTween.tween(selector, {x: noteLeftGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                    canMoveSelector = true;
+                }});
+                FlxTween.tween(selector2, {x: noteLeftGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                    canMoveSelector = true;
+                }});
+
+            case 1:
+                canMoveSelector = false;
+                FlxTween.tween(selector, {x: noteDownGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                    canMoveSelector = true;
+                }});
+                FlxTween.tween(selector2, {x: noteDownGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                    canMoveSelector = true;
+                }});
+
+            case 2:
+                canMoveSelector = false;
+                FlxTween.tween(selector, {x: noteUpGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                    canMoveSelector = true;
+                }});
+                FlxTween.tween(selector2, {x: noteUpGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                    canMoveSelector = true;
+                }});
+
+            case 3:
+                canMoveSelector = false;
+                FlxTween.tween(selector, {x: noteRightGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                    canMoveSelector = true;
+                    }});
+                    FlxTween.tween(selector2, {x: noteRightGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                        canMoveSelector = true;
+                    }});
+
+            case 4:
+                canMoveSelector = false;
+                FlxTween.tween(selector, {x: noteGlobalGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                    canMoveSelector = true;
+                }});
+                FlxTween.tween(selector2, {x: noteGlobalGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
+                canMoveSelector = true;
+                }});
+        }
+    }
+    
+    // Base Color
+    colorInput.text = curColorArrayLeft[switch (curSelected) {
+        case 0:
+            curSelectedLeft;
+        case 1:
+            curSelectedDown;
+        case 2:
+            curSelectedUp;
+        case 3:
+            curSelectedRight;
+        case 4:
+            curSelectedGlobal;
+    }];
+
+    colorInputR.value = acquireRGBArray(switch (curSelected) {
+        case 0:
+            curColorArrayLeft[curSelectedLeft];
+        case 1:
+            curColorArrayDown[curSelectedDown];
+        case 2:
+            curColorArrayUp[curSelectedUp];
+        case 3:
+            curColorArrayRight[curSelectedRight];
+        case 4:
+            curColorArrayGlobal[curSelectedGlobal];
+    })[0];
+    colorInputG.value = acquireRGBArray(switch (curSelected) {
+        case 0:
+            curColorArrayLeft[curSelectedLeft];
+        case 1:
+            curColorArrayDown[curSelectedDown];
+        case 2:
+            curColorArrayUp[curSelectedUp];
+        case 3:
+            curColorArrayRight[curSelectedRight];
+        case 4:
+            curColorArrayGlobal[curSelectedGlobal];
+    })[1];
+    colorInputB.value = acquireRGBArray(switch (curSelected) {
+        case 0:
+            curColorArrayLeft[curSelectedLeft];
+        case 1:
+            curColorArrayDown[curSelectedDown];
+        case 2:
+            curColorArrayUp[curSelectedUp];
+        case 3:
+            curColorArrayRight[curSelectedRight];
+        case 4:
+            curColorArrayGlobal[curSelectedGlobal];
+    })[2];
+
+    // Outline Color
+    colorInputDark.text = curColorArrayLeftDark[switch (curSelected) {
+        case 0:
+            curSelectedLeft;
+        case 1:
+            curSelectedDown;
+        case 2:
+            curSelectedUp;
+        case 3:
+            curSelectedRight;
+        case 4:
+            curSelectedGlobal;
+    }];
+    
+    colorInputDarkR.value = acquireRGBArray(switch (curSelected) {
+        case 0:
+            curColorArrayLeftDark[curSelectedLeft];
+        case 1:
+            curColorArrayDownDark[curSelectedDown];
+        case 2:
+            curColorArrayUpDark[curSelectedUp];
+        case 3:
+            curColorArrayRightDark[curSelectedRight];
+        case 4:
+            curColorArrayGlobalDark[curSelectedGlobal];
+    })[0];
+    colorInputDarkG.value = acquireRGBArray(switch (curSelected) {
+        case 0:
+            curColorArrayLeftDark[curSelectedLeft];
+        case 1:
+            curColorArrayDownDark[curSelectedDown];
+        case 2:
+            curColorArrayUpDark[curSelectedUp];
+        case 3:
+            curColorArrayRightDark[curSelectedRight];
+        case 4:
+            curColorArrayGlobalDark[curSelectedGlobal];
+    })[1];
+    colorInputDarkB.value = acquireRGBArray(switch (curSelected) {
+        case 0:
+            curColorArrayLeftDark[curSelectedLeft];
+        case 1:
+            curColorArrayDownDark[curSelectedDown];
+        case 2:
+            curColorArrayUpDark[curSelectedUp];
+        case 3:
+            curColorArrayRightDark[curSelectedRight];
+        case 4:
+            curColorArrayGlobalDark[curSelectedGlobal];
+    })[2];
+
+    // White Color
+    colorInputWhite.text = curColorArrayLeftWhite[switch (curSelected) {
+        case 0:
+            curSelectedLeft;
+        case 1:
+            curSelectedDown;
+        case 2:
+            curSelectedUp;
+        case 3:
+            curSelectedRight;
+        case 4:
+            curSelectedGlobal;
+    }];
+
+    colorInputWhiteR.value = acquireRGBArray(switch (curSelected) {
+        case 0:
+            curColorArrayLeftWhite[curSelectedLeft];
+        case 1:
+            curColorArrayDownWhite[curSelectedDown];
+        case 2:
+            curColorArrayUpWhite[curSelectedUp];
+        case 3:
+            curColorArrayRightWhite[curSelectedRight];
+        case 4:
+            curColorArrayGlobalWhite[curSelectedGlobal];
+    })[0];
+    colorInputWhiteG.value = acquireRGBArray(switch (curSelected) {
+        case 0:
+            curColorArrayLeftWhite[curSelectedLeft];
+        case 1:
+            curColorArrayDownWhite[curSelectedDown];
+        case 2:
+            curColorArrayUpWhite[curSelectedUp];
+        case 3:
+            curColorArrayRightWhite[curSelectedRight];
+        case 4:
+            curColorArrayGlobalWhite[curSelectedGlobal];
+    })[1];
+    colorInputWhiteB.value = acquireRGBArray(switch (curSelected) {
+        case 0:
+            curColorArrayLeftWhite[curSelectedLeft];
+        case 1:
+            curColorArrayDownWhite[curSelectedDown];
+        case 2:
+            curColorArrayUpWhite[curSelectedUp];
+        case 3:
+            curColorArrayRightWhite[curSelectedRight];
+        case 4:
+            curColorArrayGlobalWhite[curSelectedGlobal];
+    })[2];
+}
 
 function changeSelection(change:Int = 0, direction:Int = 0) {
     if (canMove) {
@@ -823,73 +1138,7 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                         curSelected = 4;
 
                     FlxG.sound.play(Paths.sound('scrollMenu'));
-
-                    switch (curSelected) {
-                        case 0:
-                            canMoveSelector = false;
-                            FlxTween.tween(selector, {x: noteLeftGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
-                                canMoveSelector = true;
-                            }});
-                            FlxTween.tween(selector2, {x: noteLeftGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
-                                canMoveSelector = true;
-                            }});
-
-                            colorInput.text = curColorArrayLeft[curSelectedLeft];
-                            colorInputDark.text = curColorArrayLeftDark[curSelectedLeft];
-                            colorInputWhite.text = curColorArrayLeftWhite[curSelectedLeft];
-
-                        case 1:
-                            canMoveSelector = false;
-                            FlxTween.tween(selector, {x: noteDownGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
-                                canMoveSelector = true;
-                            }});
-                            FlxTween.tween(selector2, {x: noteDownGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
-                                canMoveSelector = true;
-                            }});
-
-                            colorInput.text = curColorArrayDown[curSelectedDown];
-                            colorInputDark.text = curColorArrayDownDark[curSelectedDown];
-                            colorInputWhite.text = curColorArrayDownWhite[curSelectedDown];
-
-                        case 2:
-                            canMoveSelector = false;
-                            FlxTween.tween(selector, {x: noteUpGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
-                                canMoveSelector = true;
-                            }});
-                            FlxTween.tween(selector2, {x: noteUpGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
-                                canMoveSelector = true;
-                            }});
-
-                            colorInput.text = curColorArrayUp[curSelectedUp];
-                            colorInputDark.text = curColorArrayUpDark[curSelectedUp];
-                            colorInputWhite.text = curColorArrayUpWhite[curSelectedUp];
-
-                        case 3:
-                            canMoveSelector = false;
-                            FlxTween.tween(selector, {x: noteRightGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
-                                canMoveSelector = true;
-                            }});
-                            FlxTween.tween(selector2, {x: noteRightGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
-                                canMoveSelector = true;
-                            }});
-
-                            colorInput.text = curColorArrayRight[curSelectedRight];
-                            colorInputDark.text = curColorArrayRightDark[curSelectedRight];
-                            colorInputWhite.text = curColorArrayRightWhite[curSelectedRight];
-
-                        case 4:
-                            canMoveSelector = false;
-                            FlxTween.tween(selector, {x: noteGlobalGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
-                                canMoveSelector = true;
-                            }});
-                            FlxTween.tween(selector2, {x: noteGlobalGroup.members[0].x + 22}, 0.2, {ease: FlxEase.quartOut, onComplete: function(twn:Flxtween) {
-                                canMoveSelector = true;
-                            }});
-
-                            colorInput.text = curColorArrayGlobal[curSelectedGlobal];
-                            colorInputDark.text = curColorArrayGlobalDark[curSelectedGlobal];
-                            colorInputWhite.text = curColorArrayGlobalWhite[curSelectedGlobal];
-                    }
+                    updateTexts(true);
                 }
 
             case 1:
@@ -905,9 +1154,6 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                 }
 
                 canMove = false;
-                colorInput.text = curColorArrayLeft[curSelectedLeft];
-                colorInputDark.text = curColorArrayLeftDark[curSelectedLeft];
-                colorInputWhite.text = curColorArrayLeftWhite[curSelectedLeft];
 
                 for (i in 0...noteLeftGroup.members.length) {
                     if (curSelectedLeft != i) {
@@ -945,6 +1191,7 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                         }});
                     }
                 }
+                updateTexts(false);
                 
                 FlxG.sound.play(Paths.sound('scrollMenu'));
 
@@ -960,10 +1207,6 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                 }
 
                 canMove = false;
-                colorInput.text = curColorArrayDown[curSelectedDown];
-                colorInputDark.text = curColorArrayDownDark[curSelectedDown];
-                colorInputWhite.text = curColorArrayDownWhite[curSelectedDown];
-
                 
                 for (i in 0...noteDownGroup.members.length) {
                     if (curSelectedDown != i) {
@@ -1001,6 +1244,7 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                         }});
                     }
                 }
+                updateTexts(false);
                 FlxG.sound.play(Paths.sound('scrollMenu'));
 
             case 3:
@@ -1015,9 +1259,7 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                 }
 
                 canMove = false;
-                colorInput.text = curColorArrayUp[curSelectedUp];
-                colorInputDark.text = curColorArrayUpDark[curSelectedUp];
-                colorInputWhite.text = curColorArrayUpWhite[curSelectedUp];
+                updateTexts(false);
 
                 for (i in 0...noteUpGroup.members.length) {
                     if (curSelectedUp != i) {
@@ -1069,9 +1311,7 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                 }
 
                 canMove = false;
-                colorInput.text = curColorArrayRight[curSelectedRight];
-                colorInputDark.text = curColorArrayRightDark[curSelectedRight];
-                colorInputWhite.text = curColorArrayRightWhite[curSelectedRight];
+                updateTexts(false);
 
                 for (i in 0...noteRightGroup.members.length) {
                     if (curSelectedRight != i) {
@@ -1123,9 +1363,7 @@ function changeSelection(change:Int = 0, direction:Int = 0) {
                 }
 
                 canMove = false;
-                colorInput.text = curColorArrayGlobal[curSelectedGlobal];
-                colorInputDark.text = curColorArrayGlobalDark[curSelectedGlobal];
-                colorInputWhite.text = curColorArrayGlobalWhite[curSelectedGlobal];
+                updateTexts(false);
 
                 for (i in 0...noteGlobalGroup.members.length) {
                     if (curSelectedGlobal != i) {
