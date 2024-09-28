@@ -5,6 +5,7 @@ require('mods/randomColors/scripts/colorTables')
 
 --[[
     This script functions as the creation method for the notes settings!
+    Also for other functions to be called by the settings substate if needed
 ]]
 function onCreate()
     setProperty("skipCountdown", true)
@@ -24,6 +25,10 @@ end
 
 function restart()
         loadColorsToFile()
+        restartSong(false)
+end
+
+function quickRestart()
         restartSong(false)
 end
 
@@ -50,9 +55,8 @@ function getNotePostfix()
 end
 
 function openSubState(name) 
-    --openCustomSubstate(name, true)
+    openCustomSubstate(name, true)
 end
-
 
 function loadColorsToFile()
     for i=1,#filePaths do

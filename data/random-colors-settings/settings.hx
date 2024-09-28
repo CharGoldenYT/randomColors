@@ -750,7 +750,78 @@ function checkForInput() {
     blockInput = false;
 }
 
-function addNote(curSelected:Int = 0) {
+// TODO: MAKE THIS DELETE WITHOUT NEEDING A RESTART
+function deleteNote() {
+    switch (curSelected) {
+        case 0:
+            if (noteLeftGroup.members.length != 1) {
+                if (noteLeftGroup.members[curSelectedLeft].animation.curAnim.name != 'addNote')
+                {
+                    curColorArrayLeft.remove(curColorArrayLeft[curSelectedLeft]);
+                    curColorArrayLeftWhite.remove(curColorArrayLeftWhite[curSelectedLeft]);
+                    curColorArrayLeftDark.remove(curColorArrayLeftDark[curSelectedLeft]);
+                    noteLeftGroup.members[curSelectedLeft].destroy();
+                    initialPosLeft.pop();
+                    flushColorTables();
+                    game.callOnLuas('quickRestart');
+                }
+            }
+        case 1:
+            if (noteDownGroup.members.length != 1) {
+                if (noteDownGroup.members[curSelectedDown].animation.curAnim.name != 'addNote')
+                {
+                    curColorArrayDown.remove(curColorArrayDown[curSelectedDown]);
+                    curColorArrayDownWhite.remove(curColorArrayDownWhite[curSelectedDown]);
+                    curColorArrayDownDark.remove(curColorArrayDownDark[curSelectedDown]);
+                    noteDownGroup.members[curSelectedDown].destroy();
+                    initialPosDown.pop();
+                    flushColorTables();
+                    game.callOnLuas('quickRestart');
+                }
+            }
+        case 2:
+            if (noteUpGroup.members.length != 1) {
+                if (noteUpGroup.members[curSelectedUp].animation.curAnim.name != 'addNote')
+                {
+                    curColorArrayUp.remove(curColorArrayUp[curSelectedUp]);
+                    curColorArrayUpWhite.remove(curColorArrayUpWhite[curSelectedUp]);
+                    curColorArrayUpDark.remove(curColorArrayUpDark[curSelectedUp]);
+                    noteUpGroup.members[curSelectedUp].destroy();
+                    initialPosUp.pop();
+                    flushColorTables();
+                    game.callOnLuas('quickRestart');
+                }
+            }
+        case 3:
+            if (noteRightGroup.members.length != 1){
+                if (noteRightGroup.members[curSelectedRight].animation.curAnim.name != 'addNote')
+                {
+                    curColorArrayRight.remove(curColorArrayRight[curSelectedRight]);
+                    curColorArrayRightWhite.remove(curColorArrayRightWhite[curSelectedRight]);
+                    curColorArrayRightDark.remove(curColorArrayRightDark[curSelectedRight]);
+                    noteRightGroup.members[curSelectedRight].destroy();
+                    initialPosRight.pop();
+                    flushColorTables();
+                    game.callOnLuas('quickRestart');
+                }
+            }
+        case 4:
+            if (noteGlobalGroup.members.length != 1) {
+                if (noteGlobalGroup.members[curSelectedGlobal].animation.curAnim.name != 'addNote')
+                {
+                    curColorArrayGlobal.remove(curColorArrayGlobal[curSelectedGlobal]);
+                    curColorArrayGlobalWhite.remove(curColorArrayGlobalWhite[curSelectedGlobal]);
+                    curColorArrayGlobalDark.remove(curColorArrayGlobalDark[curSelectedGlobal]);
+                    noteGlobalGroup.members[curSelectedGlobal].destroy();
+                    initialPosGlobal.pop();
+                    flushColorTables();
+                    game.callOnLuas('quickRestart');
+                }
+            }
+    }
+}
+
+function addNote() {
     switch(curSelected) {
         
         case 0:
@@ -766,7 +837,7 @@ function addNote(curSelected:Int = 0) {
                 noteLeftGroup.members[curSelectedLeft].rgbShader.b = FlxColor.fromString('#801C00');
                 noteLeftGroup.members[curSelectedLeft].animation.addByPrefix('purble', 'purple', 0);
                 noteLeftGroup.members[curSelectedLeft].animation.play('purble');
-                noteDownGroup.members[curSelectedLeft].offset.y = 0;
+                noteLeftGroup.members[curSelectedLeft].offset.y = 0;
                 var strumNote = new StrumNote(noteLeftGroup.members[curSelectedLeft].x, 120 * noteLeftGroup.members.length, 0, 1);
                 strumNote.texture = 'color_select_essentials';
                 strumNote.animation.addByPrefix('addNote', 'purple', 0);
@@ -932,7 +1003,11 @@ function onCustomSubstateUpdate(name:String, elapsed:Float)
             }
 
             if (controls.ACCEPT) {
-                addNote(curSelected);
+                addNote();
+            }
+
+            if (FlxG.keys.justPressed.DELETE) {
+                deleteNote();
             }
 
             if (controls.UI_LEFT_P)

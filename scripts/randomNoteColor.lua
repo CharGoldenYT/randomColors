@@ -278,6 +278,114 @@ local ogNoteSkin = runHaxeCode([[
 
 	return ClientPrefs.data.noteSkin;
 ]])
+local filePaths = {
+    'global/colors',
+    'global/colorsDark',
+    'global/colorsWhite',
+    'left/colors',
+    'left/colorsDark',
+    'left/colorsWhite',
+    'down/colors',
+    'down/colorsDark',
+    'down/colorsWhite',
+    'up/colors',
+    'up/colorsDark',
+    'up/colorsWhite',
+    'right/colors',
+    'right/colorsDark',
+    'right/colorsWhite'
+}
+local open = io.open
+
+local function read_file(path)
+    local file = open(path, "rb") -- r read mode and b binary mode
+    if not file then return nil end
+    local content = file:read "*a" -- *a or *all reads the whole file
+    file:close()
+    return content
+end
+colorTable = {}
+	
+function reloadTables()
+	for i=1,#filePaths do
+		-- Table Setup
+		--colorTable = {}
+
+		-- load the file!
+		path = 'mods/randomColors/data/colors/'..filePaths[i]..'.txt'
+		--debugPrint(filePaths[i])
+		colorTable = runHaxeCode([[
+			import sys.io.File;
+
+			return File.getContent(']]..path..[[').split('\n');]])
+		--debugPrint(colorTable)
+
+        -- Global
+        if i == 1 then
+            globalTable = colorTable
+        end
+
+        if i == 2 then
+            globalTableDark = colorTable
+        end
+
+        if i == 3 then
+            globalTableWhite = colorTable
+        end
+
+        -- Left
+        if i == 4 then
+            leftArrowTable = colorTable
+        end
+
+        if i == 5 then
+            leftArrowTableDark = colorTable
+        end
+
+        if i == 6 then
+            leftArrowTableWhite = colorTable
+        end
+
+        -- Down
+        if i == 7 then
+            downArrowTable = colorTable
+        end
+
+        if i == 8 then
+            downArrowTableDark = colorTable
+        end
+
+        if i == 9 then
+            downArrowTableWhite = colorTable
+        end
+
+        -- Up
+        if i == 10 then
+            upArrowTable = colorTable
+        end
+
+        if i == 11 then
+            upArrowTableDark = colorTable
+        end
+
+        if i == 12 then
+            upArrowTableWhite = colorTable
+        end
+
+        -- Right
+        if i == 13 then
+            rightArrowTable = colorTable
+        end
+
+        if i == 14 then
+            rightArrowTableDark = colorTable
+        end
+
+        if i == 15 then
+            rightArrowTableWhite = colorTable
+        end
+	end
+end
 function onStartCountdown()
 	doNoteRandom()
 
@@ -338,6 +446,7 @@ function onStartCountdown()
 		end
 		--if textureSuffix ~= 'pixelUI/' then doTextureRandom() end
  	end
+	 reloadTables()
 end
 
 ---
