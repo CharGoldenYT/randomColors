@@ -602,7 +602,7 @@ function flushColorTables() {
         if (i == curColorArrayLeftWhite.length - 1)
             colorString += curColorArrayLeftWhite[i];
     }
-    trace('Saving Whites: ' + colorString + '\n');
+    //trace('Saving Whites: ' + colorString + '\n');
     File.saveContent(path, colorString);
 
     colorString = '';
@@ -635,7 +635,7 @@ function flushColorTables() {
         if (i == curColorArrayDownWhite.length - 1)
             colorString += curColorArrayDownWhite[i];
     }
-    trace('Saving Whites: ' + colorString + '\n');
+    //trace('Saving Whites: ' + colorString + '\n');
     File.saveContent(path, colorString);
 
     colorString = '';
@@ -668,7 +668,7 @@ function flushColorTables() {
         if (i == curColorArrayUpWhite.length - 1)
             colorString += curColorArrayUpWhite[i];
     }
-    trace('Saving Whites: ' + colorString + '\n');
+    //trace('Saving Whites: ' + colorString + '\n');
     File.saveContent(path, colorString);
 
     colorString = '';
@@ -701,7 +701,7 @@ function flushColorTables() {
         if (i == curColorArrayRightWhite.length - 1)
             colorString += curColorArrayRightWhite[i];
     }
-    trace('Saving Whites: ' + colorString + '\n');
+    //trace('Saving Whites: ' + colorString + '\n');
     File.saveContent(path, colorString);
 
     colorString = '';
@@ -734,7 +734,7 @@ function flushColorTables() {
         if (i == curColorArrayGlobalWhite.length - 1)
             colorString += curColorArrayGlobalWhite[i];
     }
-    trace('Saving Whites: ' + colorString + '\n');
+    //trace('Saving Whites: ' + colorString + '\n');
     File.saveContent(path, colorString);
 }
 
