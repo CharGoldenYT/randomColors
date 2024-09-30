@@ -135,17 +135,22 @@ var subStateMusic:FlxSound;
 
 function onCustomSubstateCreate(name:String) {
     PlayState.instance.canPause = false; // need to call this else people can break it by simply opening the pause menu lmao.
-    PlayState.instance.allowDebugKeys = false;
+    PlayState.instance.allowDebugKeys = false; // Ditto but with stuff like the chart menu and the character menu
+
     FlxG.mouse.visible = true;
     FlxG.sound.music.volume = 0;// just in case
+
     subStateMusic = new FlxSound();
     subStateMusic.loadEmbedded(Paths.music('offsetSong'));
     subStateMusic.looped = true;
     subStateMusic.play();
     FlxG.sound.list.add(subStateMusic); // so it auto pauses if auto pause is enabled
+
     controls = Controls.instance;
+
     doFileCheck();
     setupArrays();
+
     BG = new FlxSprite().loadGraphic(Paths.image('menuBGMagenta'));
     BG.screenCenter();
     BG.cameras = [PlayState.instance.camOther];
@@ -176,6 +181,7 @@ function onCustomSubstateCreate(name:String) {
     noteUpGroup.cameras = [PlayState.instance.camOther];
     noteRightGroup.cameras = [PlayState.instance.camOther];
     noteGlobalGroup.cameras = [PlayState.instance.camOther];
+
     globalText = new FlxText(0, 0, 0, 'Global Colors', 20);
     globalText.setFormat(Paths.font('vcr.ttf'), 20);
     globalText.cameras = [PlayState.instance.camOther];
@@ -194,30 +200,7 @@ function onCustomSubstateCreate(name:String) {
     colorInputBG.alpha = 0.5;
     colorInputBG.cameras = [PlayState.instance.camOther];
     add(colorInputBG);
-
-    setupTextInput();
-    setupRGBSteppers();
-    setupTextCallbacks();
-    colorInputBG.y = colorInput.y - 300;
-    colorInputBG.x = colorInput.x - 100;
     
-
-    globalText.x = noteGlobalGroup.members[0].x - 20;
-    globalText.y = noteGlobalGroup.members[0].y + 5;
-    add(globalText);
-}
-
-// Fill it with junk data basically.
-function doFileCheck() {
-    for (path in paths) {
-        path = 'mods/randomColors/data/colors/' + path + '.txt';
-        if (!FileSystem.exists(path)) {
-            File.saveContent(path, 'FFFFFF\nFFFFFF');
-        }
-    }
-}
-
-function setupTextInput() {
     selector = new FlxSprite().loadGraphic(Paths.image('buttons'));
     selector.frames = Paths.getSparrowAtlas('buttons');
     selector.animation.addByPrefix('idle', 'arrow Down0', 24, false);
@@ -245,12 +228,39 @@ function setupTextInput() {
     selector2.antialiasing = ClientPrefs.data.antialiasing;
     add(selector2);
 
+    setupTextInput();
+    setupRGBSteppers();
+    setupTextCallbacks();
+
+    colorInputBG.y = colorInput.y - 300;
+    colorInputBG.x = colorInput.x - 100;
+    
+
+    globalText.x = noteGlobalGroup.members[0].x - 20;
+    globalText.y = noteGlobalGroup.members[0].y + 5;
+
+    add(globalText);
+}
+
+// Fill it with junk data basically.
+function doFileCheck() {
+    for (path in paths) {
+        path = 'mods/randomColors/data/colors/' + path + '.txt';
+        if (!FileSystem.exists(path)) {
+            File.saveContent(path, 'FFFFFF\nFFFFFF');
+        }
+    }
+}
+
+function setupTextInput() {
+
     colorInput = new FlxUIInputText(0, 0, 100, curColorArrayLeft[0]);
     colorInput.cameras = [PlayState.instance.camOther];
     colorInput.screenCenter();
     colorInput.y += -500;
     colorInput.x += 500;
     add(colorInput);
+
     var colorText = new FlxText(0, 0, 0, 'Note Color', 10);
     colorText.y = colorInput.y - 20;
     colorText.x = colorInput.x;
@@ -263,6 +273,7 @@ function setupTextInput() {
     colorInputDark.y += -330;
     colorInputDark.x += 500;
     add(colorInputDark);
+
     var colorText = new FlxText(0, 0, 0, 'Note Color (Outline)', 10);
     colorText.y = colorInputDark.y - 20;
     colorText.x = colorInputDark.x;
@@ -275,6 +286,7 @@ function setupTextInput() {
     colorInputWhite.y += -180;
     colorInputWhite.x += 500;
     add(colorInputWhite);
+
     var colorText = new FlxText(0, 0, 0, 'Note Color (White Area)', 10);
     colorText.y = colorInputWhite.y - 20;
     colorText.x = colorInputWhite.x;
@@ -286,7 +298,7 @@ function setupTextInput() {
     inputBlock.push(colorInputWhite);
 }
 // Converts a two length hex number to a 256-max decimal
-function convertHexToInt(hex:String) {
+function convertHexToInt(hex:String):Int {
     var hexArray = hex.split();
     var finalInt:Int = 0;
     for (i in 0...hexArray.length) {
@@ -310,7 +322,6 @@ function convertHexToInt(hex:String) {
         }
         //trace(hexArray[i]);
     }
-
     return finalInt;
 }
 
@@ -439,7 +450,7 @@ function acquireRGBArray(str:String):Array<Int>
             hex2 += hex[i];
         }
         if (i >= 4) {
-            hex3 = hex[i];
+            hex3 += hex[i];
         }
         //trace('Cur Hex: ' + hex[i]);
     }
@@ -467,23 +478,30 @@ function setupTextCallbacks() {
             }
             colorInput.text = string;
         }
+
         switch(curSelected) {
             case 0:
                 noteLeftGroup.members[curSelectedLeft].rgbShader.r = FlxColor.fromString('#' + colorInput.text);
                 curColorArrayLeft[curSelectedLeft] = colorInput.text;
+
             case 1:
                 noteDownGroup.members[curSelectedDown].rgbShader.r = FlxColor.fromString('#' + colorInput.text);
                 curColorArrayDown[curSelectedDown] = colorInput.text;
+
             case 2:
                 noteUpGroup.members[curSelectedUp].rgbShader.r = FlxColor.fromString('#' + colorInput.text);
                 curColorArrayUp[curSelectedUp] = colorInput.text;
+
             case 3:
                 noteRightGroup.members[curSelectedRight].rgbShader.r = FlxColor.fromString('#' + colorInput.text);
                 curColorArrayRight[curSelectedRight] = colorInput.text;
+
             case 4:
                 noteGlobalGroup.members[curSelectedGlobal].rgbShader.r = FlxColor.fromString('#' + colorInput.text);
                 curColorArrayGlobal[curSelectedGlobal] = colorInput.text;
+                
         }
+        
         if (colorInput.text.length == 6)
             flushColorTables();
     }
@@ -497,23 +515,30 @@ function setupTextCallbacks() {
             }
             colorInputWhite.text = string;
         }
+
         switch(curSelected) {
             case 0:
                 noteLeftGroup.members[curSelectedLeft].rgbShader.g = FlxColor.fromString('#' + colorInputWhite.text);
                 curColorArrayLeftWhite[curSelectedLeft] = colorInputWhite.text;
+
             case 1:
                 noteDownGroup.members[curSelectedDown].rgbShader.g = FlxColor.fromString('#' + colorInputWhite.text);
                 curColorArrayDownWhite[curSelectedDown] = colorInputWhite.text;
+
             case 2:
                 noteUpGroup.members[curSelectedUp].rgbShader.g = FlxColor.fromString('#' + colorInputWhite.text);
                 curColorArrayUpWhite[curSelectedUp] = colorInputWhite.text;
+
             case 3:
                 noteRightGroup.members[curSelectedRight].rgbShader.g = FlxColor.fromString('#' + colorInputWhite.text);
                 curColorArrayRightWhite[curSelectedRight] = colorInputWhite.text;
+
             case 4:
                 noteGlobalGroup.members[curSelectedGlobal].rgbShader.g = FlxColor.fromString('#' + colorInputWhite.text);
                 curColorArrayGlobalWhite[curSelectedGlobal] = colorInputWhite.text;
+
         }
+
         if (colorInputWhite.text.length == 6)
             flushColorTables();
     }
@@ -527,23 +552,30 @@ function setupTextCallbacks() {
             }
             colorInputDark.text = string;
         }
+
         switch(curSelected) {
             case 0:
                 noteLeftGroup.members[curSelectedLeft].rgbShader.b = FlxColor.fromString('#' + colorInputDark.text);
                 curColorArrayLeftDark[curSelectedLeft] = colorInputDark.text;
+
             case 1:
                 noteDownGroup.members[curSelectedDown].rgbShader.b = FlxColor.fromString('#' + colorInputDark.text);
                 curColorArrayDownDark[curSelectedDown] = colorInputDark.text;
+
             case 2:
                 noteUpGroup.members[curSelectedUp].rgbShader.b = FlxColor.fromString('#' + colorInputDark.text);
                 curColorArrayUpDark[curSelectedUp] = colorInputDark.text;
+
             case 3:
                 noteRightGroup.members[curSelectedRight].rgbShader.b = FlxColor.fromString('#' + colorInputDark.text);
                 curColorArrayRightDark[curSelectedRight] = colorInputDark.text;
+
             case 4:
                 noteGlobalGroup.members[curSelectedGlobal].rgbShader.b = FlxColor.fromString('#' + colorInputDark.text);
                 curColorArrayGlobalDark[curSelectedGlobal] = colorInputDark.text;
+
         }
+
         if (colorInputDark.text.length == 6)
             flushColorTables();
     }
