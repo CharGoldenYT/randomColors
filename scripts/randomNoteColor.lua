@@ -3,6 +3,19 @@
 	Yknow this Script used to be simple. - Char
 ]]
 
+-- Required so that settings reflects the current noteskin lmao
+local isSettings = false
+
+isSettings = runHaxeCode([[
+	import states.PlayState;
+
+	return PlayState.SONG.song == 'random-colors-settings';
+]])
+
+if isSettings then
+	close(false)
+end
+
 -- Variables that controls the scripts behaviours --
 
 	-- Whether to randomize the white color, or leave at what you set in options
@@ -31,6 +44,7 @@ local trueChaos = getModSetting('trueChaos')
 
 	-- Forces even non default noteType's textures to be random
 local forceRandom = getModSetting('forceRandom')
+
 
 if trueChaos then
 	affectWhite = true
