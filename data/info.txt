@@ -1,0 +1,1 @@
+color files are now ignored by github to make keeping custom colors while developing this easier
