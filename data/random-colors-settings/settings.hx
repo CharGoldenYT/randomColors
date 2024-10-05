@@ -1,31 +1,31 @@
 // This 1 file is so damn big lmao.
-import backend.Paths;
-import backend.Mods;
-import backend.Controls;
 import backend.ClientPrefs;
-import flixel.tweens.FlxTween;
-import flixel.tweens.FlxEase;
+import backend.Controls;
+import backend.Mods;
+import backend.Paths;
 import flixel.FlxG;
-import flixel.FlxSprite;
 import flixel.FlxObject;
-import flixel.group.FlxTypedSpriteGroup;
-import flixel.text.FlxText;
-import flixel.text.FlxTextBorderStyle;
-import flixel.text.FlxTextAlign;
-import flixel.util.FlxColor;
-import objects.StrumNote;
-import sys.io.File;
-import sys.io.FileSystem;
-import states.PlayState;
-import flixel.util.FlxColor;
-import flixel.util.FlxTimer;
-import flixel.addons.ui.FlxUIInputText;
-import flixel.addons.ui.FlxUI;
-import flixel.addons.ui.FlxUITabMenu;
-import flixel.addons.ui.FlxUINumericStepper;
+import flixel.FlxSprite;
 import flixel.addons.display.FlxBackdrop;
 import flixel.addons.display.FlxGridOverlay;
+import flixel.addons.ui.FlxUI;
+import flixel.addons.ui.FlxUIInputText;
+import flixel.addons.ui.FlxUINumericStepper;
+import flixel.addons.ui.FlxUITabMenu;
+import flixel.group.FlxTypedSpriteGroup;
 import flixel.sound.FlxSound;
+import flixel.text.FlxText;
+import flixel.text.FlxTextAlign;
+import flixel.text.FlxTextBorderStyle;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxColor;
+import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
+import objects.StrumNote;
+import states.PlayState;
+import sys.io.File;
+import sys.io.FileSystem;
 
 using StringTools;
 
@@ -852,16 +852,19 @@ function deleteNote() {
             }
     }
 }
-
+// The following 3 variables control the new note's color in RRGGBB format.
+var color = 'FF7700';
+var colorWhite = 'FFFFFF';
+var colorDark = '801C00';
 function addNote() {
     switch(curSelected) {
         
         case 0:
             if (noteLeftGroup.members[curSelectedLeft].animation.curAnim.name == 'addNote')
             {
-                curColorArrayLeft.push('FF7700');
-                curColorArrayLeftWhite.push('FFFFFF');
-                curColorArrayLeftDark.push('801C00');
+				curColorArrayLeft.push(color);
+				curColorArrayLeftWhite.push(colorWhite);
+				curColorArrayLeftDark.push(colorDark);
                 noteLeftGroup.members[curSelectedLeft].texture = 'noteSkins/NOTE_assets' + game.callOnLuas('getNotePostfix');
                 noteLeftGroup.members[curSelectedLeft].rgbShader.enabled = true;
                 noteLeftGroup.members[curSelectedLeft].rgbShader.r = FlxColor.fromString('#FF7700');
@@ -886,9 +889,9 @@ function addNote() {
         case 1:
             if (noteDownGroup.members[curSelectedDown].animation.curAnim.name == 'addNote')
             {
-                curColorArrayDown.push('FF7700');
-                curColorArrayDownWhite.push('FFFFFF');
-                curColorArrayDownDark.push('801C00');
+				curColorArrayDown.push(color);
+				curColorArrayDownWhite.push(colorWhite);
+				curColorArrayDownDark.push(colorDark);
                 noteDownGroup.members[curSelectedDown].texture = 'noteSkins/NOTE_assets' + game.callOnLuas('getNotePostfix');
                 noteDownGroup.members[curSelectedDown].rgbShader.enabled = true;
                 noteDownGroup.members[curSelectedDown].rgbShader.r = FlxColor.fromString('#FF7700');
@@ -913,9 +916,9 @@ function addNote() {
         case 2:
             if (noteUpGroup.members[curSelectedUp].animation.curAnim.name == 'addNote')
             {
-                curColorArrayUp.push('FF7700');
-                curColorArrayUpWhite.push('FFFFFF');
-                curColorArrayUpDark.push('801C00');
+				curColorArrayUp.push(color);
+				curColorArrayUpWhite.push(colorWhite);
+				curColorArrayUpDark.push(colorDark);
                 noteUpGroup.members[curSelectedUp].texture = 'noteSkins/NOTE_assets' + game.callOnLuas('getNotePostfix');
                 noteUpGroup.members[curSelectedUp].rgbShader.enabled = true;
                 noteUpGroup.members[curSelectedUp].rgbShader.r = FlxColor.fromString('#FF7700');
@@ -940,9 +943,9 @@ function addNote() {
         case 3:
             if (noteRightGroup.members[curSelectedRight].animation.curAnim.name == 'addNote')
             {
-                curColorArrayRight.push('FF7700');
-                curColorArrayRightWhite.push('FFFFFF');
-                curColorArrayRightDark.push('801C00');
+				curColorArrayRight.push(color);
+				curColorArrayRightWhite.push(colorWhite);
+				curColorArrayRightDark.push(colorDark);
                 noteRightGroup.members[curSelectedRight].texture = 'noteSkins/NOTE_assets' + game.callOnLuas('getNotePostfix');
                 noteRightGroup.members[curSelectedRight].rgbShader.enabled = true;
                 noteRightGroup.members[curSelectedRight].rgbShader.r = FlxColor.fromString('#FF7700');
@@ -967,9 +970,9 @@ function addNote() {
         case 4:
             if (noteGlobalGroup.members[curSelectedGlobal].animation.curAnim.name == 'addNote')
             {
-                curColorArrayGlobal.push('FF7700');
-                curColorArrayGlobalWhite.push('FFFFFF');
-                curColorArrayGlobalDark.push('801C00');
+				curColorArrayGlobal.push(color);
+				curColorArrayGlobalWhite.push(colorWhite);
+				curColorArrayGlobalDark.push(colorDark);
                 noteGlobalGroup.members[curSelectedGlobal].rgbShader.enabled = true;
                 noteGlobalGroup.members[curSelectedGlobal].rgbShader.r = FlxColor.fromString('#FF7700');
                 noteGlobalGroup.members[curSelectedGlobal].rgbShader.g = FlxColor.fromString('#FFFFFF');
