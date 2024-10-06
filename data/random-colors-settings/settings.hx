@@ -853,9 +853,9 @@ function deleteNote() {
     }
 }
 // The following 3 variables control the new note's color in RRGGBB format.
-var color = 'FF7700';
-var colorWhite = 'FFFFFF';
-var colorDark = '801C00';
+var color = 'FF0000';
+var colorWhite = '00FF00';
+var colorDark = '0000FF';
 function addNote() {
     switch(curSelected) {
         
