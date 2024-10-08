@@ -1,3 +1,5 @@
+I have decided to cancel this project, no further action is required on your end and nothing needs to be given
+
 # TO DO:
 
 > [!NOTE]
