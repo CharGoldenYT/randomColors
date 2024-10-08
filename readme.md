@@ -7,13 +7,13 @@
 >
 > (Low Priority) - Will be done near the end of coding, as final touches, but arent neccassary.
 
-- (High Priority) Make the numeric steppers actually affect the note color
+- $${\color{red}(High Priority) \space Make \space the \space numeric \space steppers \space actually \space affect \space the \space note \space color}$$
 
-- (High Priority) Add a button to delete a note, and (Low Priority) make it so you dont have to restart upon deleting a note
+- $${\color{red}(High Priority) \space Add \space a \space button \space to \space delete \space a \space note, \space and \space \color{lightblue}(Low Priority) \space make \space it \space so \space you \space dont \space have \space to \space restart \space upon \space deleting \space a \space note}$$
 
-- (Low Priority) Make the Buttons go ontop of a FlxUI object instead of a slightly transparent black rectangle
+- $${\color{lightblue}(Low Priority) \space Make \space the \space Buttons \space go \space ontop \space of \space a \space FlxUI \space object \space instead \space of \space a \space slightly \space transparent \space black \space rectangle}$$
 
-- (Low Priority) Make the notes invisible and inactive if off-screen
+- $${\color{lightblue}(Low Priority) \space Make \space the \space notes \space invisible \space and \space inactive \space if \space off-screen}$$
 
 If i forgot anything, be sure to add it here
 
