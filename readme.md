@@ -14,4 +14,4 @@ NOTE TO APOLLO:
 
 STOP ADDING THE BACKUP COLORS FOLDER. its entirely unneccassary, and doesn't need to be there.
 
-i'll make the missing color data file checker add those colors if it cant find data/<colorPath>/<colorFile> by the end, but just don't re add that folder.
+i'll make the missing color data file checker add those colors if it cant find data/(colorPath)/(colorFile) by the end, but just don't re add that folder.
