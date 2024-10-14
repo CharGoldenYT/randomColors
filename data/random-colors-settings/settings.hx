@@ -883,7 +883,7 @@ function addNote() {
                 noteLeftGroup.members[curSelectedLeft].rgbShader.r = FlxColor.fromString('#' + curColorArrayLeft[curSelectedLeft]);
                 noteLeftGroup.members[curSelectedLeft].rgbShader.g = FlxColor.fromString('#' + curColorArrayLeftWhite[curSelectedLeft]);
                 noteLeftGroup.members[curSelectedLeft].rgbShader.b = FlxColor.fromString('#' + curColorArrayLeftDark[curSelectedLeft]);
-                noteLeftGroup.members[curSelectedLeft].animation.addByPrefix('purble', 'purple', 0);
+                noteLeftGroup.members[curSelectedLeft].animation.addByPrefix('purble', 'purple0', 0);
                 noteLeftGroup.members[curSelectedLeft].animation.play('purble');
                 noteLeftGroup.members[curSelectedLeft].offset.y = 0;
                 var strumNote = new StrumNote(noteLeftGroup.members[curSelectedLeft].x, 120 * noteLeftGroup.members.length, 0, 1);
@@ -912,7 +912,7 @@ function addNote() {
                 noteDownGroup.members[curSelectedDown].rgbShader.r = FlxColor.fromString('#' + curColorArrayDown[curSelectedDown]);
                 noteDownGroup.members[curSelectedDown].rgbShader.g = FlxColor.fromString('#' + curColorArrayDownWhite[curSelectedDown]);
                 noteDownGroup.members[curSelectedDown].rgbShader.b = FlxColor.fromString('#' + curColorArrayDownDark[curSelectedDown]);
-                noteDownGroup.members[curSelectedDown].animation.addByPrefix('purble', 'blue', 0);
+                noteDownGroup.members[curSelectedDown].animation.addByPrefix('purble', 'blue0', 0);
                 noteDownGroup.members[curSelectedDown].animation.play('purble');
                 noteDownGroup.members[curSelectedDown].offset.y = 0;
                 var strumNote = new StrumNote(noteDownGroup.members[curSelectedDown].x, 120 * noteDownGroup.members.length, 0, 1);
@@ -941,7 +941,7 @@ function addNote() {
                 noteUpGroup.members[curSelectedUp].rgbShader.r = FlxColor.fromString('#' + curColorArrayUp[curSelectedUp]);
                 noteUpGroup.members[curSelectedUp].rgbShader.g = FlxColor.fromString('#' + curColorArrayUpWhite[curSelectedUp]);
                 noteUpGroup.members[curSelectedUp].rgbShader.b = FlxColor.fromString('#' + curColorArrayUpDark[curSelectedUp]);
-                noteUpGroup.members[curSelectedUp].animation.addByPrefix('purble', 'green', 0);
+                noteUpGroup.members[curSelectedUp].animation.addByPrefix('purble', 'green0', 0);
                 noteUpGroup.members[curSelectedUp].animation.play('purble');
                 noteUpGroup.members[curSelectedUp].offset.y = 0;
                 var strumNote = new StrumNote(noteUpGroup.members[curSelectedUp].x, 120 * noteUpGroup.members.length, 0, 1);
@@ -970,7 +970,7 @@ function addNote() {
                 noteRightGroup.members[curSelectedRight].rgbShader.r = FlxColor.fromString('#' + curColorArrayRight[curSelectedRight]);
                 noteRightGroup.members[curSelectedRight].rgbShader.g = FlxColor.fromString('#' + curColorArrayRightWhite[curSelectedRight]);
                 noteRightGroup.members[curSelectedRight].rgbShader.b = FlxColor.fromString('#' + curColorArrayRightDark[curSelectedRight]);
-                noteRightGroup.members[curSelectedRight].animation.addByPrefix('purble', 'red', 0);
+                noteRightGroup.members[curSelectedRight].animation.addByPrefix('purble', 'red0', 0);
                 noteRightGroup.members[curSelectedRight].animation.play('purble');
                 noteRightGroup.members[curSelectedRight].offset.y = 0;
                 var strumNote = new StrumNote(noteRightGroup.members[curSelectedRight].x, 120 * noteRightGroup.members.length, 0, 1);
