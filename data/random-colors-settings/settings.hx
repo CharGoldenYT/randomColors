@@ -1639,7 +1639,7 @@ function doNoteScreenSpawn() {
         strumNote.rgbShader.r = FlxColor.fromString('#' + curColorArrayLeft[i]);
         strumNote.rgbShader.g = FlxColor.fromString('#' + curColorArrayLeftWhite[i]);
         strumNote.rgbShader.b = FlxColor.fromString('#' + curColorArrayLeftDark[i]);
-        strumNote.animation.addByPrefix('purble', 'purple', 0);
+        strumNote.animation.addByPrefix('purble', 'purple0', 0);
         strumNote.animation.play('purble');
         noteLeftGroup.add(strumNote);
         initialPosLeft.push(strumNote.y);
@@ -1659,7 +1659,7 @@ function doNoteScreenSpawn() {
         strumNote.rgbShader.r = FlxColor.fromString('#' + curColorArrayDown[i]);
         strumNote.rgbShader.g = FlxColor.fromString('#' + curColorArrayDownWhite[i]);
         strumNote.rgbShader.b = FlxColor.fromString('#' + curColorArrayDownDark[i]);
-        strumNote.animation.addByPrefix('purble', 'blue', 0);
+        strumNote.animation.addByPrefix('purble', 'blue0', 0);
         strumNote.animation.play('purble');
         noteDownGroup.add(strumNote);
         initialPosDown.push(strumNote.y);
@@ -1678,7 +1678,7 @@ function doNoteScreenSpawn() {
         strumNote.rgbShader.r = FlxColor.fromString('#' + curColorArrayUp[i]);
         strumNote.rgbShader.g = FlxColor.fromString('#' + curColorArrayUpWhite[i]);
         strumNote.rgbShader.b = FlxColor.fromString('#' + curColorArrayUpDark[i]);
-        strumNote.animation.addByPrefix('purble', 'green', 0);
+        strumNote.animation.addByPrefix('purble', 'green0', 0);
         strumNote.animation.play('purble');
         noteUpGroup.add(strumNote);
         initialPosUp.push(strumNote.y);
@@ -1697,7 +1697,7 @@ function doNoteScreenSpawn() {
         strumNote.rgbShader.r = FlxColor.fromString('#' + curColorArrayRight[i]);
         strumNote.rgbShader.g = FlxColor.fromString('#' + curColorArrayRightWhite[i]);
         strumNote.rgbShader.b = FlxColor.fromString('#' + curColorArrayRightDark[i]);
-        strumNote.animation.addByPrefix('purble', 'red', 0);
+        strumNote.animation.addByPrefix('purble', 'red0', 0);
         strumNote.animation.play('purble');
         noteRightGroup.add(strumNote);
         initialPosRight.push(strumNote.y);
