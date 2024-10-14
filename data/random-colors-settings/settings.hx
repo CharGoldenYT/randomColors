@@ -244,6 +244,11 @@ function onCustomSubstateCreate(name:String) {
 
 // Fill it with junk data basically.
 function doFileCheck() {
+    if (!FileSystem.exists('mods/randomColors/data/colors')) {
+        for (path in paths) {
+            FileSystem.createDirectory('mods/randomColors/data/colors/' + path);
+        }
+    }
     for (path in paths) {
         path = 'mods/randomColors/data/colors/' + path + '.txt';
         if (!FileSystem.exists(path)) {
@@ -867,9 +872,9 @@ function addNote() {
 				curColorArrayLeftDark.push(colorDark);
                 noteLeftGroup.members[curSelectedLeft].texture = 'noteSkins/NOTE_assets' + game.callOnLuas('getNotePostfix');
                 noteLeftGroup.members[curSelectedLeft].rgbShader.enabled = true;
-                noteLeftGroup.members[curSelectedLeft].rgbShader.r = FlxColor.fromString('#FF7700');
-                noteLeftGroup.members[curSelectedLeft].rgbShader.g = FlxColor.fromString('#FFFFFF');
-                noteLeftGroup.members[curSelectedLeft].rgbShader.b = FlxColor.fromString('#801C00');
+                noteLeftGroup.members[curSelectedLeft].rgbShader.r = FlxColor.fromString('#' + curColorArrayLeft[curSelectedLeft]);
+                noteLeftGroup.members[curSelectedLeft].rgbShader.g = FlxColor.fromString('#' + curColorArrayLeftWhite[curSelectedLeft]);
+                noteLeftGroup.members[curSelectedLeft].rgbShader.b = FlxColor.fromString('#' + curColorArrayLeftDark[curSelectedLeft]);
                 noteLeftGroup.members[curSelectedLeft].animation.addByPrefix('purble', 'purple', 0);
                 noteLeftGroup.members[curSelectedLeft].animation.play('purble');
                 noteLeftGroup.members[curSelectedLeft].offset.y = 0;
@@ -894,9 +899,9 @@ function addNote() {
 				curColorArrayDownDark.push(colorDark);
                 noteDownGroup.members[curSelectedDown].texture = 'noteSkins/NOTE_assets' + game.callOnLuas('getNotePostfix');
                 noteDownGroup.members[curSelectedDown].rgbShader.enabled = true;
-                noteDownGroup.members[curSelectedDown].rgbShader.r = FlxColor.fromString('#FF7700');
-                noteDownGroup.members[curSelectedDown].rgbShader.g = FlxColor.fromString('#FFFFFF');
-                noteDownGroup.members[curSelectedDown].rgbShader.b = FlxColor.fromString('#801C00');
+                noteDownGroup.members[curSelectedDown].rgbShader.r = FlxColor.fromString('#' + curColorArrayDown[curSelectedDown]);
+                noteDownGroup.members[curSelectedDown].rgbShader.g = FlxColor.fromString('#' + curColorArrayDownWhite[curSelectedDown]);
+                noteDownGroup.members[curSelectedDown].rgbShader.b = FlxColor.fromString('#' + curColorArrayDownDark[curSelectedDown]);
                 noteDownGroup.members[curSelectedDown].animation.addByPrefix('purble', 'blue', 0);
                 noteDownGroup.members[curSelectedDown].animation.play('purble');
                 noteDownGroup.members[curSelectedDown].offset.y = 0;
@@ -921,9 +926,9 @@ function addNote() {
 				curColorArrayUpDark.push(colorDark);
                 noteUpGroup.members[curSelectedUp].texture = 'noteSkins/NOTE_assets' + game.callOnLuas('getNotePostfix');
                 noteUpGroup.members[curSelectedUp].rgbShader.enabled = true;
-                noteUpGroup.members[curSelectedUp].rgbShader.r = FlxColor.fromString('#FF7700');
-                noteUpGroup.members[curSelectedUp].rgbShader.g = FlxColor.fromString('#FFFFFF');
-                noteUpGroup.members[curSelectedUp].rgbShader.b = FlxColor.fromString('#801C00');
+                noteUpGroup.members[curSelectedUp].rgbShader.r = FlxColor.fromString('#' + curColorArrayUp[curSelectedUp]);
+                noteUpGroup.members[curSelectedUp].rgbShader.g = FlxColor.fromString('#' + curColorArrayUpWhite[curSelectedUp]);
+                noteUpGroup.members[curSelectedUp].rgbShader.b = FlxColor.fromString('#' + curColorArrayUpDark[curSelectedUp]);
                 noteUpGroup.members[curSelectedUp].animation.addByPrefix('purble', 'green', 0);
                 noteUpGroup.members[curSelectedUp].animation.play('purble');
                 noteUpGroup.members[curSelectedUp].offset.y = 0;
@@ -948,9 +953,9 @@ function addNote() {
 				curColorArrayRightDark.push(colorDark);
                 noteRightGroup.members[curSelectedRight].texture = 'noteSkins/NOTE_assets' + game.callOnLuas('getNotePostfix');
                 noteRightGroup.members[curSelectedRight].rgbShader.enabled = true;
-                noteRightGroup.members[curSelectedRight].rgbShader.r = FlxColor.fromString('#FF7700');
-                noteRightGroup.members[curSelectedRight].rgbShader.g = FlxColor.fromString('#FFFFFF');
-                noteRightGroup.members[curSelectedRight].rgbShader.b = FlxColor.fromString('#801C00');
+                noteRightGroup.members[curSelectedRight].rgbShader.r = FlxColor.fromString('#' + curColorArrayRight[curSelectedRight]);
+                noteRightGroup.members[curSelectedRight].rgbShader.g = FlxColor.fromString('#' + curColorArrayRightWhite[curSelectedRight]);
+                noteRightGroup.members[curSelectedRight].rgbShader.b = FlxColor.fromString('#' + curColorArrayRightDark[curSelectedRight]);
                 noteRightGroup.members[curSelectedRight].animation.addByPrefix('purble', 'red', 0);
                 noteRightGroup.members[curSelectedRight].animation.play('purble');
                 noteRightGroup.members[curSelectedRight].offset.y = 0;
@@ -974,9 +979,9 @@ function addNote() {
 				curColorArrayGlobalWhite.push(colorWhite);
 				curColorArrayGlobalDark.push(colorDark);
                 noteGlobalGroup.members[curSelectedGlobal].rgbShader.enabled = true;
-                noteGlobalGroup.members[curSelectedGlobal].rgbShader.r = FlxColor.fromString('#FF7700');
-                noteGlobalGroup.members[curSelectedGlobal].rgbShader.g = FlxColor.fromString('#FFFFFF');
-                noteGlobalGroup.members[curSelectedGlobal].rgbShader.b = FlxColor.fromString('#801C00');
+                noteGlobalGroup.members[curSelectedGlobal].rgbShader.r = FlxColor.fromString('#' + curColorArrayGlobal[curSelectedGlobal]);
+                noteGlobalGroup.members[curSelectedGlobal].rgbShader.g = FlxColor.fromString('#' + curColorArrayGlobalWhite[curSelectedGlobal]);
+                noteGlobalGroup.members[curSelectedGlobal].rgbShader.b = FlxColor.fromString('#' + curColorArrayGlobalDark[curSelectedGlobal]);
                 noteGlobalGroup.members[curSelectedGlobal].animation.addByPrefix('purble', 'grey rgb', 0);
                 noteGlobalGroup.members[curSelectedGlobal].animation.play('purble');
                 noteGlobalGroup.members[curSelectedGlobal].offset.y = 0;
