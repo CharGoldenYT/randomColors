@@ -1348,6 +1348,72 @@ function updateTexts(movedSelector:Bool) {
         case 4:
             curColorArrayGlobalWhite[curSelectedGlobal];
     })[2];
+    
+    for (i in 0...noteDownGroup.members.length) {
+        if (i - curSelectedDown < 0 && i - curSelectedDown <= -3) {
+            noteDownGroup.members[i].visible = false;
+            noteDownGroup.members[i].active = false;
+        }
+        else if (i - curSelectedDown > 0 && i - curSelectedDown >= 3) {
+            noteDownGroup.members[i].visible = false;
+            noteDownGroup.members[i].active = false;
+        } else {
+            noteDownGroup.members[i].visible = true;
+            noteDownGroup.members[i].active = true;
+        }
+    }
+    for (i in 0...noteLeftGroup.members.length) {
+        if (i - curSelectedLeft < 0 && i - curSelectedLeft <= -3) {
+            noteLeftGroup.members[i].visible = false;
+            noteLeftGroup.members[i].active = false;
+        }
+        else if (i - curSelectedLeft > 0 && i - curSelectedLeft >= 3) {
+            noteLeftGroup.members[i].visible = false;
+            noteLeftGroup.members[i].active = false;
+        } else {
+            noteLeftGroup.members[i].visible = true;
+            noteLeftGroup.members[i].active = true;
+        }
+    }
+    for (i in 0...noteUpGroup.members.length) {
+        if (i - curSelectedUp < 0 && i - curSelectedUp <= -3) {
+            noteUpGroup.members[i].visible = false;
+            noteUpGroup.members[i].active = false;
+        }
+        else if (i - curSelectedUp > 0 && i - curSelectedUp >= 3) {
+            noteUpGroup.members[i].visible = false;
+            noteUpGroup.members[i].active = false;
+        } else {
+            noteUpGroup.members[i].visible = true;
+            noteUpGroup.members[i].active = true;
+        }
+    }
+    for (i in 0...noteRightGroup.members.length) {
+        if (i - curSelectedRight < 0 && i - curSelectedRight <= -3) {
+            noteRightGroup.members[i].visible = false;
+            noteRightGroup.members[i].active = false;
+        }
+        else if (i - curSelectedRight > 0 && i - curSelectedRight >= 3) {
+            noteRightGroup.members[i].visible = false;
+            noteRightGroup.members[i].active = false;
+        } else {
+            noteRightGroup.members[i].visible = true;
+            noteRightGroup.members[i].active = true;
+        }
+    }
+    for (i in 0...noteGlobalGroup.members.length) {
+        if (i - curSelectedGlobal < 0 && i - curSelectedGlobal <= -3) {
+            noteGlobalGroup.members[i].visible = false;
+            noteGlobalGroup.members[i].active = false;
+        }
+        else if (i - curSelectedGlobal > 0 && i - curSelectedGlobal >= 3) {
+            noteGlobalGroup.members[i].visible = false;
+            noteGlobalGroup.members[i].active = false;
+        } else {
+            noteGlobalGroup.members[i].visible = true;
+            noteGlobalGroup.members[i].active = true;
+        }
+    }
 }
 
 function changeSelection(change:Int = 0, direction:Int = 0) {
