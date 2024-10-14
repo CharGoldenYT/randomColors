@@ -1,8 +1,13 @@
 // This 1 file is so damn big lmao.
+// Psych's shit.
 import backend.ClientPrefs;
 import backend.Controls;
 import backend.Mods;
 import backend.Paths;
+import objects.StrumNote;
+import states.PlayState;
+
+// Flixel's Shit.
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -12,6 +17,7 @@ import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUINumericStepper;
 import flixel.addons.ui.FlxUITabMenu;
+import flixel.addons.ui.FlxUIButton;
 import flixel.group.FlxTypedSpriteGroup;
 import flixel.sound.FlxSound;
 import flixel.text.FlxText;
@@ -22,8 +28,6 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
-import objects.StrumNote;
-import states.PlayState;
 import sys.io.File;
 import sys.io.FileSystem;
 
@@ -435,6 +439,10 @@ function setupRGBSteppers() {
     colorText.x = colorInputWhite.x;
     colorText.cameras = [PlayState.instance.camOther];
     add(colorText);
+
+    var funnyButton:FlxUIButton = new FlxUIButton(colorInputWhite.x - 70, colorInputWhite.y + 450, 'Delete Note', deleteNote);
+    funnyButton.cameras = [PlayState.instance.camOther];
+    add(funnyButton);
 }
 
 function acquireRGBArray(str:String):Array<Int>
@@ -885,7 +893,9 @@ function addNote() {
                 noteLeftGroup.add(strumNote);
                 initialPosLeft.push(strumNote.y);
                 var variable = (120 * (noteLeftGroup.members.length-1 % 4)) - 120;
-                strumNote.y += -variable;
+                var calc = strumNote.y - variable;
+                strumNote.y = -100;
+                FlxTween.tween(strumNote, {y: calc}, 0.2, {ease: FlxEase.quartOut});
                 strumNote.offset.y = -55;
                 strumNote.alpha = 0.5;
                 flushColorTables();
@@ -912,7 +922,9 @@ function addNote() {
                 initialPosDown.push(strumNote.y);
                 noteDownGroup.add(strumNote);
                 var variable = (120 * (noteDownGroup.members.length-1 % 4)) - 120;
-                strumNote.y += -variable;
+                var calc = strumNote.y - variable;
+                strumNote.y = -100;
+                FlxTween.tween(strumNote, {y: calc}, 0.2, {ease: FlxEase.quartOut});
                 strumNote.offset.y = -55;
                 strumNote.alpha = 0.5;
                 flushColorTables();
@@ -939,7 +951,9 @@ function addNote() {
                 noteUpGroup.add(strumNote);
                 initialPosUp.push(strumNote.y);
                 var variable = (120 * (noteUpGroup.members.length-1 % 4)) - 120;
-                strumNote.y += -variable;
+                var calc = strumNote.y - variable;
+                strumNote.y = -100;
+                FlxTween.tween(strumNote, {y: calc}, 0.2, {ease: FlxEase.quartOut});
                 strumNote.offset.y = -55;
                 strumNote.alpha = 0.5;
                 flushColorTables();
@@ -965,7 +979,9 @@ function addNote() {
                 strumNote.animation.play('addNote');
                 noteRightGroup.add(strumNote);
                 var variable = (120 * (noteRightGroup.members.length-1 % 4)) - 120;
-                strumNote.y += -variable;
+                var calc = strumNote.y - variable;
+                strumNote.y = -100;
+                FlxTween.tween(strumNote, {y: calc}, 0.2, {ease: FlxEase.quartOut});
                 strumNote.offset.y = -55;
                 strumNote.alpha = 0.5;
                 flushColorTables();
@@ -992,7 +1008,9 @@ function addNote() {
                 noteGlobalGroup.add(strumNote);
                 initialPosGlobal.push(strumNote.y);
                 var variable = (120 * (noteGlobalGroup.members.length-1 % 4)) - 120;
-                strumNote.y += -variable;
+                var calc = strumNote.y - variable;
+                strumNote.y = -100;
+                FlxTween.tween(strumNote, {y: calc}, 0.2, {ease: FlxEase.quartOut});
                 strumNote.offset.y = -55;
                 strumNote.alpha = 0.5;
                 flushColorTables();
